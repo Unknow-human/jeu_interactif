@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Inscription - Code Duel</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="theme-light">
+  <header>
+    <h1>Inscription</h1>
+    <a href="/">Accueil</a>
+    <button id="toggleTheme">Toggle Dark/Light</button>
+  </header>
+  <main>
+    <% if (message) { %>
+      <p class="error"><%= message %></p>
+    <% } %>
+    <form action="/register" method="POST">
+      <label for="username">Nom d'utilisateur</label>
+      <input type="text" name="username" id="username" required>
+      <label for="password">Mot de passe</label>
+      <input type="password" name="password" id="password" required>
+      <button type="submit">Inscription</button>
+    </form>
+    <p>Déjà inscrit ? <a href="/login">Connectez-vous</a></p>
+  </main>
+  <script src="/js/main.js"></script>
+</body>
+</html>

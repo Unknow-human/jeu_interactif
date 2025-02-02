@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Connexion - Code Duel</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="theme-light">
+  <header>
+    <h1>Connexion</h1>
+    <a href="/">Accueil</a>
+    <button id="toggleTheme">Toggle Dark/Light</button>
+  </header>
+  <main>
+    <% if (message) { %>
+      <p class="error"><%= message %></p>
+    <% } %>
+    <form action="/login" method="POST">
+      <label for="username">Nom d'utilisateur</label>
+      <input type="text" name="username" id="username" required>
+      <label for="password">Mot de passe</label>
+      <input type="password" name="password" id="password" required>
+      <button type="submit">Connexion</button>
+    </form>
+    <p>Pas encore inscrit ? <a href="/register">Inscrivez-vous</a></p>
+  </main>
+  <script src="/js/main.js"></script>
+</body>
+</html>

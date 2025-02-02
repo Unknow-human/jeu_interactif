@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Code Duel</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="theme-light">
+  <header>
+    <h1>Tableau de bord</h1>
+    <p>Connecté en tant que <%= user.username %></p>
+    <a href="/">Accueil</a>
+    <a href="/logout">Déconnexion</a>
+    <button id="toggleTheme">Toggle Dark/Light</button>
+  </header>
+  <main>
+    <h2>Inviter un adversaire</h2>
+    <% if (users.length > 0) { %>
+      <ul>
+      <% users.forEach(function(u) { %>
+        <li>
+          <%= u.username %> 
+          <a href="/duel/<%= u.username %>">Défier</a>
+        </li>
+      <% }); %>
+      </ul>
+    <% } else { %>
+      <p>Aucun autre joueur disponible.</p>
+    <% } %>
+  </main>
+  <script src="/js/main.js"></script>
+</body>
+</html>
