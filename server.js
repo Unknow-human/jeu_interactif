@@ -8,7 +8,10 @@ const bcrypt = require('bcrypt');
 const compression = require('compression');
 const fs = require('fs');
 
-const MemoryStore = require('memorystore')(session);
+const memorystore = require('memorystore')(session);
+const sessionStore = new memorystore({
+  checkPeriod: 86400000 
+});
 
 // Charger le secret depuis les variables d'environnement
 const sessionSecret =  'e729ffd39b8d6ab337f8c5a9d2a1c6e6f5a3930e8c4183c59e1a492bbcd6d97e6ea8b7365d0c91f2d92f3156b34cd11db7f89e5bb324ef16b2bf8a3e6d4a90f5';
@@ -22,16 +25,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Configuration de la session
 const sessionMiddleware= session({
   secret: sessionSecret,
-  resave: true, // Empêche de sauvegarder la session à chaque requête si elle n'a pas été modifiée
-  saveUninitialized: true, // Ne sauvegarde pas les sessions non initialisées
+  resave: false, // Empêche de sauvegarder la session à chaque requête si elle n'a pas été modifiée
+  saveUninitialized: false, // Ne sauvegarde pas les sessions non initialisées
+  store: sessionStore,
   cookie: {
     maxAge: 86400000 // Durée de vie du cookie de session (ici, 1 jour)
-  },
-  store: new MemoryStore({ checkPeriod: 86400000 }) // Nettoie les sessions toutes les 24 heures
+  }
 });
 
-// Forcer HTTPS en production (facultatif selon vos besoins)
 app.use(sessionMiddleware);
+
 io.use((socket,next)=> {
   sessionMiddleware(socket.request,{},next);
 });
