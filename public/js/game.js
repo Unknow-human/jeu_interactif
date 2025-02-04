@@ -2,11 +2,8 @@
 const socket = io();
 
 // Récupérer le nom d'utilisateur depuis la session
-// Vous pouvez le passer depuis le backend en l'injectant dans la page ou le récupérer via une requête
-
 let username;
 
-// Exemple : récupérer le nom d'utilisateur via une requête AJAX
 fetch('/getUserInfo')
   .then(response => response.json())
   .then(data => {
@@ -23,8 +20,9 @@ const submitGuessBtn = document.getElementById('submitGuess');
 const feedback = document.getElementById('feedback');
 const chatInput = document.getElementById('chatInput');
 const messages = document.getElementById('messages');
+const historyList = document.getElementById('historyList');
+const chatBox = document.getElementById('chatBox');
 
-// Variables
 let gameMode = ''; // 'solo' ou 'duel'
 
 // Sélection du mode de jeu
@@ -44,8 +42,9 @@ function startGame() {
   document.getElementById('gameModeSelection').style.display = 'none';
   gameArea.style.display = 'block';
   if (gameMode === 'solo') {
-    // Générer un code secret
     socket.emit('startSoloGame');
+    // Désactiver le chat en mode solo
+    chatBox.style.display = 'none';
   }
 }
 
@@ -66,19 +65,33 @@ if (submitGuessBtn) {
 socket.on('feedback', (data) => {
   feedback.innerHTML += `<p>${data}</p>`;
   feedback.scrollTop = feedback.scrollHeight;
+
+  // Ajouter à l'historique en mode solo
+  if (gameMode === 'solo') {
+    const listItem = document.createElement('li');
+    listItem.textContent = data;
+    historyList.appendChild(listItem);
+  }
 });
 
 // Affichage du vainqueur
 socket.on('gameOver', (message) => {
   alert(message);
+  // Désactiver le chat
+  chatBox.style.display = 'none';
   location.reload();
+});
+
+// Activer le chat en mode duel
+socket.on('enableChat', () => {
+  chatBox.style.display = 'block';
 });
 
 // Gestion du chat
 if (chatInput) {
   chatInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && chatInput.value.trim() !== '') {
-      socket.emit('chatMessage', chatInput.value);
+      socket.emit('chatMessage', chatInput.value.trim());
       chatInput.value = '';
     }
   });
