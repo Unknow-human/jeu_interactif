@@ -29,12 +29,13 @@ const historySection = document.getElementById('history');
 let gameMode = ''; // 'solo' ou 'duel'
 
 // Sélection du mode de jeu
-if (soloModeBtn && duelModeBtn) {
+if (soloModeBtn) {
   soloModeBtn.addEventListener('click', () => {
     gameMode = 'solo';
     startGame();
   });
-
+}
+if (duelModeBtn) {
   duelModeBtn.addEventListener('click', () => {
     gameMode = 'duel';
     startGame();
