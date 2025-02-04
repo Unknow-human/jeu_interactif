@@ -1,9 +1,9 @@
 // public/js/game.js
 const socket = io();
 
-// Récupérer le nom d'utilisateur depuis la session
 let username;
 
+// Récupérer le nom d'utilisateur
 fetch('/getUserInfo')
   .then(response => response.json())
   .then(data => {
@@ -18,10 +18,13 @@ const gameArea = document.getElementById('gameArea');
 const guessInput = document.getElementById('guessInput');
 const submitGuessBtn = document.getElementById('submitGuess');
 const feedback = document.getElementById('feedback');
-const chatInput = document.getElementById('chatInput');
-const messages = document.getElementById('messages');
 const historyList = document.getElementById('historyList');
 const chatBox = document.getElementById('chatBox');
+const messages = document.getElementById('messages');
+const chatInput = document.getElementById('chatInput');
+const abandonBtn = document.getElementById('abandonBtn');
+const returnBtn = document.getElementById('returnBtn');
+const historySection = document.getElementById('history');
 
 let gameMode = ''; // 'solo' ou 'duel'
 
@@ -34,6 +37,7 @@ if (soloModeBtn && duelModeBtn) {
 
   duelModeBtn.addEventListener('click', () => {
     gameMode = 'duel';
+    startGame();
     socket.emit('findMatch');
   });
 }
@@ -41,10 +45,14 @@ if (soloModeBtn && duelModeBtn) {
 function startGame() {
   document.getElementById('gameModeSelection').style.display = 'none';
   gameArea.style.display = 'block';
+  feedback.innerHTML = '';
   if (gameMode === 'solo') {
     socket.emit('startSoloGame');
-    // Désactiver le chat en mode solo
     chatBox.style.display = 'none';
+    historySection.style.display = 'block';
+  } else if (gameMode === 'duel') {
+    chatBox.style.display = 'none'; // Sera activé lors de la connexion à un duel
+    historySection.style.display = 'none'; // Historique non nécessaire en duel
   }
 }
 
@@ -66,25 +74,23 @@ socket.on('feedback', (data) => {
   feedback.innerHTML += `<p>${data}</p>`;
   feedback.scrollTop = feedback.scrollHeight;
 
-  // Ajouter à l'historique en mode solo
   if (gameMode === 'solo') {
+    // Ajouter à l'historique en mode solo
     const listItem = document.createElement('li');
     listItem.textContent = data;
     historyList.appendChild(listItem);
   }
 });
 
-// Affichage du vainqueur
-socket.on('gameOver', (message) => {
-  alert(message);
-  // Désactiver le chat
-  chatBox.style.display = 'none';
-  location.reload();
-});
-
 // Activer le chat en mode duel
 socket.on('enableChat', () => {
   chatBox.style.display = 'block';
+});
+
+// Affichage du vainqueur
+socket.on('gameOver', (message) => {
+  alert(message);
+  resetGame();
 });
 
 // Gestion du chat
@@ -97,7 +103,7 @@ if (chatInput) {
   });
 
   socket.on('chatMessage', (data) => {
-    messages.innerHTML += `<p><strong>${data.user}:</strong> ${data.message}</p>`;
+    messages.innerHTML += `<p><strong>${data.user} :</strong> ${data.message}</p>`;
     messages.scrollTop = messages.scrollHeight;
   });
 }
@@ -117,12 +123,45 @@ function displayNotification(message) {
   }, 5000);
 }
 
-// Mise à jour du classement
-socket.on('updateLeaderboard', (leaderboard) => {
-  // Vous pouvez mettre à jour le classement sur la page si nécessaire
-});
-
 // Message de bienvenue
 socket.on('welcome', (message) => {
   displayNotification(message);
+});
+
+// Bouton d'abandon
+if (abandonBtn) {
+  abandonBtn.addEventListener('click', () => {
+    if (confirm('Voulez-vous vraiment abandonner la partie ?')) {
+      socket.emit('abandon');
+      resetGame();
+    }
+  });
+}
+
+// Bouton retour
+if (returnBtn) {
+  returnBtn.addEventListener('click', () => {
+    resetGame();
+  });
+}
+
+// Fonction pour réinitialiser le jeu
+function resetGame() {
+  gameArea.style.display = 'none';
+  document.getElementById('gameModeSelection').style.display = 'block';
+  feedback.innerHTML = '';
+  historyList.innerHTML = '';
+  chatBox.style.display = 'none';
+  historySection.style.display = 'none';
+}
+
+// Gestion de la déconnexion de l'adversaire
+socket.on('opponentLeft', (message) => {
+  alert(message);
+  resetGame();
+});
+
+// Désactiver le chat si le joueur quitte le mode duel
+window.addEventListener('beforeunload', () => {
+  socket.emit('leaveGame');
 });
