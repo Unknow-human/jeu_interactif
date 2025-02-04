@@ -4,9 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Jeu - Devinez le Code</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
   <div class="container fade-in">
@@ -21,23 +20,31 @@
       <button id="submitGuess" class="btn">Valider</button>
       <div id="feedback"></div>
       <!-- Historique des tentatives -->
-      <div id="history">
+      <div id="history" style="display:none;">
         <h3>Historique des tentatives :</h3>
         <ul id="historyList"></ul>
       </div>
       <!-- Chat -->
       <div id="chatBox" style="display:none;">
+        <h3>Chat</h3>
         <div id="messages"></div>
         <input type="text" id="chatInput" placeholder="Envoyer un message...">
+      </div>
+      <!-- Boutons Abandonner et Retour -->
+      <div class="game-buttons">
+        <button id="abandonBtn" class="btn btn-secondary">Abandonner</button>
+        <button id="returnBtn" class="btn btn-return">Retour</button>
       </div>
     </div>
     <div class="buttons">
       <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
       <a href="/logout" class="btn btn-secondary">Déconnexion</a>
+      <a href="help.html" class="btn btn-return">Aide</a>
       <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
     </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/game.js"></script>
-  
+</body>
+</html>
