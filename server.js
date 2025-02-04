@@ -16,10 +16,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
-
+const sessionSecret = 'e729ffd39b8d6ab337f8c5a9d2a1c6e6f5a3930e8c4183c59e1a492bbcd6d97e6ea8b7365d0c91f2d92f3156b34cd11db7f89e5bb324ef16b2bf8a3e6d4a90f5';
 // Configuration de la session
 app.use(session({
-  secret: 'votre_secret_ici', // Remplacez par une chaîne secrète sécurisée
+  secret: sessionSecret, // Remplacez par une chaîne secrète sécurisée
   resave: false, // Ne sauvegarde la session que si elle a été modifiée
   saveUninitialized: false, // Ne sauvegarde pas les sessions non initialisées
   cookie: {
