@@ -21,3 +21,23 @@ window.addEventListener('load', () => {
     document.body.classList.add('light-theme');
   }
 });
+// main.js
+
+// Fonction pour vérifier si l'utilisateur est connecté et afficher le menu
+function displayMenuIfLoggedIn() {
+  fetch('/getUserInfo')
+    .then(response => {
+      if (response.ok) {
+        const topMenu = document.getElementById('topMenu');
+        if (topMenu) {
+          topMenu.style.display = 'flex';
+        }
+      }
+    })
+    .catch(error => {
+      console.log('Utilisateur non connecté');
+    });
+}
+
+// Appeler la fonction au chargement de la page
+window.addEventListener('DOMContentLoaded', displayMenuIfLoggedIn);
