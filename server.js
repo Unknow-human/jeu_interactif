@@ -20,22 +20,20 @@ app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuration de la session
-app.use(session({
+const sessionMiddleware= session({
   secret: sessionSecret,
   resave: false, // Empêche de sauvegarder la session à chaque requête si elle n'a pas été modifiée
   saveUninitialized: false, // Ne sauvegarde pas les sessions non initialisées
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 // Durée de vie du cookie de session (ici, 1 jour)
+    maxAge: 86400000 // Durée de vie du cookie de session (ici, 1 jour)
   },
   store: new MemoryStore({ checkPeriod: 86400000 }) // Nettoie les sessions toutes les 24 heures
-}));
+});
 
 // Forcer HTTPS en production (facultatif selon vos besoins)
-app.use((req, res, next) => {
-  if (req.headers['x-forwarded-proto'] !== 'https' && process.env.NODE_ENV === 'production') {
-    return res.redirect('https://' + req.headers.host + req.url);
-  }
-  next();
+app.use(sessionMiddleware);
+io.use((socket,next)=> {
+  sessionMiddleware(socket.request,{},next);
 });
 
 // Chargement des utilisateurs depuis un fichier JSON
