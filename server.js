@@ -22,8 +22,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Configuration de la session
 const sessionMiddleware= session({
   secret: sessionSecret,
-  resave: false, // Empêche de sauvegarder la session à chaque requête si elle n'a pas été modifiée
-  saveUninitialized: false, // Ne sauvegarde pas les sessions non initialisées
+  resave: true, // Empêche de sauvegarder la session à chaque requête si elle n'a pas été modifiée
+  saveUninitialized: true, // Ne sauvegarde pas les sessions non initialisées
   cookie: {
     maxAge: 86400000 // Durée de vie du cookie de session (ici, 1 jour)
   },
@@ -153,11 +153,11 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
           console.log('nouvelle connexion scket établis');
- // const req = socket.request;
-  //if (!req.session || !req.session.user) {
-  //  console.log('Utilisateur non authentifié, déconnexion du socket.');
- //   return socket.disconnect(true);
- // }
+ const req = socket.request;
+  if (!req.session || !req.session.user) {
+   console.log('Utilisateur non authentifié, déconnexion du socket.');
+  return socket.disconnect(true);
+  }
 
   const username = req.session.user.username;
   const user = users.find(u => u.username === username);
