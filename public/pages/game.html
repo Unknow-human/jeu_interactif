@@ -20,18 +20,24 @@
       <input type="text" id="guessInput" maxlength="4">
       <button id="submitGuess" class="btn">Valider</button>
       <div id="feedback"></div>
-      <div id="chatBox">
+      <!-- Historique des tentatives -->
+      <div id="history">
+        <h3>Historique des tentatives :</h3>
+        <ul id="historyList"></ul>
+      </div>
+      <!-- Chat -->
+      <div id="chatBox" style="display:none;">
         <div id="messages"></div>
         <input type="text" id="chatInput" placeholder="Envoyer un message...">
       </div>
     </div>
-    <a href="profile.html" class="btn">Mon Profil</a>
-    <a href="/logout" class="btn">Déconnexion</a>
-    <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+    <div class="buttons">
+      <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
+      <a href="/logout" class="btn btn-secondary">Déconnexion</a>
+      <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+    </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/game.js"></script>
-  <script src="../js/chat.js"></script>
-</body>
-</html>
+  
