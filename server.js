@@ -49,6 +49,10 @@ app.get('/login.html', (req, res) => {
   res.sendFile(__dirname + '/public/pages/login.html');
 });
 
+app.get('/index.html', (req, res) => {
+  res.sendFile(__dirname + '/public/pages/login.html');
+});
+
 app.get('/register.html', (req, res) => {
   res.sendFile(__dirname + '/public/pages/register.html');
 });
