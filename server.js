@@ -154,6 +154,7 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
+          console.log('nouvelle connexion scket établis');
   const req = socket.request;
   if (!req.session || !req.session.user) {
     console.log('Utilisateur non authentifié, déconnexion du socket.');
@@ -174,6 +175,7 @@ io.on('connection', (socket) => {
 
   // Démarrer une partie solo
   socket.on('startSoloGame', () => {
+            console.log('evenement "startsologame" reçu du client');
     socket.game = {
       mode: 'solo',
       secretCode: generateSecretCode(),
