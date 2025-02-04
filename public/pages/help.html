@@ -3,16 +3,16 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Aide - Devinez le Code</title>
+  <title>Aide - Numéno 4</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <!-- Menu en Haut -->
-  <div class="top-menu">
+  <!-- Menu en Haut (Affiché si l'utilisateur est connecté) -->
+  <div id="topMenu" class="top-menu" style="display: none;">
     <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
+    <a href="leaderboard.html" class="btn btn-secondary">Classement</a>
     <a href="/logout" class="btn btn-secondary">Déconnexion</a>
-    <a href="game.html" class="btn btn-return">Retour au jeu</a>
     <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
   </div>
 
@@ -26,11 +26,23 @@
     </ul>
     <p>Le premier joueur à trouver le code exact remporte la partie !</p>
     <div class="buttons">
-      <a href="game.html" class="btn btn-return">Retour à l'accueil</a>
+      <a href="index.html" class="btn btn-return">Retour à l'accueil</a>
       <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
     </div>
   </div>
 
   <script src="../js/main.js"></script>
+  <script>
+    // Script pour afficher le menu si l'utilisateur est connecté
+    fetch('/getUserInfo')
+      .then(response => {
+        if (response.ok) {
+          document.getElementById('topMenu').style.display = 'flex';
+        }
+      })
+      .catch(error => {
+        console.log('Utilisateur non connecté');
+      });
+  </script>
 </body>
 </html>
