@@ -157,7 +157,7 @@ io.on('connection', (socket) => {
   }
 
   // Démarrer une partie solo
-  socket.on('startSoloGame', () => {
+   socket.on('startSoloGame', () => {
     socket.game = {
       mode: 'solo',
       secretCode: generateSecretCode(),
@@ -181,6 +181,18 @@ io.on('connection', (socket) => {
 
   // Recevoir une proposition
   socket.on('guess', (guess) => {
+    if (socket.game && socket.game.mode === 'solo') {
+      let result = checkGuess(guess, socket.game.secretCode);
+      socket.game.attempts++;
+      socket.emit('feedback', `Vous avez proposé ${guess} : ${result}`);
+
+      // Vérifier si le joueur a gagné
+      if (result.includes('4 chiffre(s) correct(s) et bien placé(s)')) {
+        socket.emit('gameOver', '🎉 Félicitations, vous avez gagné en mode solo !');
+        updateScore(socket.username, 'solo');
+      }
+    }
+    else if (socket.game && socket.game.mode === 'duel') {
     if (!socket.game || !guess || guess.length !== 4 || !/^\d{4}$/.test(guess)) {
       return socket.emit('feedback', 'Entrée invalide.');
     }
@@ -199,9 +211,7 @@ io.on('connection', (socket) => {
         if (opponentSocket) {
           opponentSocket.emit('gameOver', `😢 Vous avez perdu ! ${socket.username} a gagné la partie.`);
           // Mettre à jour le score de l'adversaire
-          updateScore(opponentSocket.username, 'defeat');
-        }
-      }
+          updateScore(opponentSocket.username, 'defeat'); } } }
     }
   });
 
