@@ -249,8 +249,26 @@ table tr:nth-child(even) {
   font-size: 16px;
   color: #ffffff;
 }
+
+/* Styles pour le menu en haut */
+.top-menu {
+  display: flex;
+  justify-content: flex-end;
+  background-color: #333;
+  padding: 10px;
+}
+
+.top-menu .btn {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.top-menu .btn:hover {
+  text-decoration: underline;
+}
 /* public/css/style.css */
-/* ... (style existant) ... */
+/* ... (styles existants) ... */
 
 /* Styles pour les boutons dans le jeu */
 .game-buttons {
@@ -276,3 +294,59 @@ table tr:nth-child(even) {
 }
 
 /* Autres styles nécessaires pour les nouveaux éléments */
+
+/* Styles pour le menu en haut */
+.top-menu {
+  display: flex;
+  justify-content: flex-end;
+  background-color: #333;
+  padding: 10px;
+}
+
+.top-menu .btn {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.top-menu .btn:hover {
+  text-decoration: underline;
+}
+
+/* Disposition de la zone de jeu et du chat */
+.game-area {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-left {
+  flex: 2;
+  padding: 20px;
+}
+
+.game-right {
+  flex: 1;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-left: 1px solid #ddd;
+  color: #000; /* Ajuster la couleur du texte pour le chat */
+}
+
+#messages {
+  height: 400px; /* Ajuster la hauteur pour voir plus de messages */
+  overflow-y: scroll;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+#chatInput {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ff6b6b;
+  border-radius: 30px;
+  background-color: transparent;
+  color: inherit;
+}
