@@ -37,13 +37,11 @@ fetch('/getUserInfo')
 // Gestion des événements pour les boutons du mode de jeu
 if (soloModeBtn && duelModeBtn) {
   soloModeBtn.addEventListener('click', () => {
-    console.log('bouton mode solo');
     gameMode = 'solo';
     startGame();
   });
   
   duelModeBtn.addEventListener('click', () => {
-     console.log('bouton mode duel');
     gameMode = 'duel';
     startGame();
     socket.emit('findMatch');
@@ -58,6 +56,7 @@ function startGame() {
   feedback.innerHTML = '';
   guessInput.value = '';
   if (gameMode === 'solo') {
+        console.log('emission de l\'evenement "startsologame" au serveur');
     socket.emit('startSoloGame');
     chatBox.style.display = 'none';
     historySection.style.display = 'block';
@@ -93,6 +92,7 @@ function submitGuess() {
 
 // Réception des feedbacks du serveur
 socket.on('feedback', (data) => {
+          console.log('feedback reç du server:',data);
   feedback.innerHTML += `<p>${data}</p>`;
   feedback.scrollTop = feedback.scrollHeight;
   
