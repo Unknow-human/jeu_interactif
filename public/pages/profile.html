@@ -1,0 +1,26 @@
+<!-- public/pages/profile.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Profil - Devinez le Code</title>
+  <link rel="stylesheet" href="../css/style.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="container fade-in">
+    <h1>Profil de <span id="usernameDisplay"></span></h1>
+    <p>Score : <span id="scoreDisplay"></span></p>
+    <h2>Récompenses</h2>
+    <div id="rewards">
+      <!-- Les récompenses seront affichées ici -->
+    </div>
+    <a href="game.html" class="btn">Retour au jeu</a>
+    <a href="/logout" class="btn">Déconnexion</a>
+    <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+  </div>
+  <script src="../js/main.js"></script>
+  <script src="../js/profile.js"></script>
+</body>
+</html>

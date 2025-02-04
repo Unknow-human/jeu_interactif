@@ -1,0 +1,37 @@
+<!-- public/pages/game.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Jeu - Devinez le Code</title>
+  <link rel="stylesheet" href="../css/style.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="container fade-in">
+    <h1>Devinez le Code</h1>
+    <div id="gameModeSelection">
+      <button id="soloMode" class="btn">Mode Solo</button>
+      <button id="duelMode" class="btn">Mode Duel</button>
+    </div>
+    <div id="gameArea" style="display:none;">
+      <p id="instructions">Entrez un code à 4 chiffres :</p>
+      <input type="text" id="guessInput" maxlength="4">
+      <button id="submitGuess" class="btn">Valider</button>
+      <div id="feedback"></div>
+      <div id="chatBox">
+        <div id="messages"></div>
+        <input type="text" id="chatInput" placeholder="Envoyer un message...">
+      </div>
+    </div>
+    <a href="profile.html" class="btn">Mon Profil</a>
+    <a href="/logout" class="btn">Déconnexion</a>
+    <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/game.js"></script>
+  <script src="../js/chat.js"></script>
+</body>
+</html>

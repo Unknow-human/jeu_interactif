@@ -1,0 +1,32 @@
+<!-- public/pages/leaderboard.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Classement - Devinez le Code</title>
+  <link rel="stylesheet" href="../css/style.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="container fade-in">
+    <h1>Classement des Joueurs</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Nom d'Utilisateur</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard">
+        <!-- Les données seront insérées ici -->
+      </tbody>
+    </table>
+    <a href="game.html" class="btn">Retour au jeu</a>
+    <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+  </div>
+  <script src="../js/main.js"></script>
+  <script src="../js/leaderboard.js"></script>
+</body>
+</html>
