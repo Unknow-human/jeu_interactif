@@ -4,45 +4,51 @@
 <head>
   <meta charset="UTF-8">
   <title>Jeu - Devinez le Code</title>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+  <!-- Menu en Haut -->
+  <div class="top-menu">
+    <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
+    <a href="/logout" class="btn btn-secondary">Déconnexion</a>
+    <a href="help.html" class="btn btn-return">Aide</a>
+    <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+  </div>
+
   <div class="container fade-in">
     <h1>Devinez le Code</h1>
     <div id="gameModeSelection">
       <button id="soloMode" class="btn">Mode Solo</button>
       <button id="duelMode" class="btn">Mode Duel</button>
     </div>
-    <div id="gameArea" style="display:none;">
-      <p id="instructions">Entrez un code à 4 chiffres :</p>
-      <input type="text" id="guessInput" maxlength="4">
-      <button id="submitGuess" class="btn">Valider</button>
-      <div id="feedback"></div>
-      <!-- Historique des tentatives -->
-      <div id="history" style="display:none;">
-        <h3>Historique des tentatives :</h3>
-        <ul id="historyList"></ul>
+    <div id="gameArea" class="game-area" style="display:none;">
+      <div class="game-left">
+        <p id="instructions">Entrez un code à 4 chiffres :</p>
+        <input type="text" id="guessInput" maxlength="4">
+        <button id="submitGuess" class="btn">Valider</button>
+        <div id="feedback"></div>
+        <!-- Historique des tentatives -->
+        <div id="history" style="display:none;">
+          <h3>Historique des tentatives :</h3>
+          <ul id="historyList"></ul>
+        </div>
       </div>
-      <!-- Chat -->
-      <div id="chatBox" style="display:none;">
-        <h3>Chat</h3>
-        <div id="messages"></div>
-        <input type="text" id="chatInput" placeholder="Envoyer un message...">
-      </div>
-      <!-- Boutons Abandonner et Retour -->
-      <div class="game-buttons">
-        <button id="abandonBtn" class="btn btn-secondary">Abandonner</button>
-        <button id="returnBtn" class="btn btn-return">Retour</button>
+      <!-- Chat à Droite -->
+      <div class="game-right">
+        <div id="chatBox">
+          <h3>Chat</h3>
+          <div id="messages"></div>
+          <input type="text" id="chatInput" placeholder="Envoyer un message...">
+        </div>
       </div>
     </div>
-    <div class="buttons">
-      <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
-      <a href="/logout" class="btn btn-secondary">Déconnexion</a>
-      <a href="help.html" class="btn btn-return">Aide</a>
-      <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+    <div class="game-buttons">
+      <button id="abandonBtn" class="btn btn-secondary">Abandonner</button>
+      <button id="returnBtn" class="btn btn-return">Retour</button>
     </div>
   </div>
+
   <script src="/socket.io/socket.io.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/game.js"></script>
