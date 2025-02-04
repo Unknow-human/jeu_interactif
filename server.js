@@ -153,11 +153,11 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
           console.log('nouvelle connexion scket établis');
-  const req = socket.request;
-  if (!req.session || !req.session.user) {
-    console.log('Utilisateur non authentifié, déconnexion du socket.');
-    return socket.disconnect(true);
-  }
+ // const req = socket.request;
+  //if (!req.session || !req.session.user) {
+  //  console.log('Utilisateur non authentifié, déconnexion du socket.');
+ //   return socket.disconnect(true);
+ // }
 
   const username = req.session.user.username;
   const user = users.find(u => u.username === username);
