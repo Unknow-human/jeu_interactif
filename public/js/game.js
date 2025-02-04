@@ -1,41 +1,46 @@
 // public/js/game.js
+
+// Initialisation de la connexion Socket.io
 const socket = io();
 
+// Variables pour stocker le nom d'utilisateur et le mode de jeu
 let username;
+let gameMode = ''; // 'solo' ou 'duel'
 
-// Récupérer le nom d'utilisateur
-fetch('/getUserInfo')
-  .then(response => response.json())
-  .then(data => {
-    username = data.username;
-    socket.emit('join', username);
-  });
-
-// Éléments du DOM
+// Sélection des éléments du DOM
 const soloModeBtn = document.getElementById('soloMode');
 const duelModeBtn = document.getElementById('duelMode');
+const gameModeSelection = document.getElementById('gameModeSelection');
 const gameArea = document.getElementById('gameArea');
 const guessInput = document.getElementById('guessInput');
 const submitGuessBtn = document.getElementById('submitGuess');
 const feedback = document.getElementById('feedback');
+const historySection = document.getElementById('history');
 const historyList = document.getElementById('historyList');
 const chatBox = document.getElementById('chatBox');
 const messages = document.getElementById('messages');
 const chatInput = document.getElementById('chatInput');
 const abandonBtn = document.getElementById('abandonBtn');
 const returnBtn = document.getElementById('returnBtn');
-const historySection = document.getElementById('history');
 
-let gameMode = ''; // 'solo' ou 'duel'
+// Récupération du nom d'utilisateur depuis le serveur
+fetch('/getUserInfo')
+  .then(response => response.json())
+  .then(data => {
+    username = data.username;
+    socket.emit('join', username);
+  })
+  .catch(error => {
+    console.error('Erreur lors de la récupération des informations utilisateur :', error);
+  });
 
-// Sélection du mode de jeu
-if (soloModeBtn) {
+// Gestion des événements pour les boutons du mode de jeu
+if (soloModeBtn && duelModeBtn) {
   soloModeBtn.addEventListener('click', () => {
     gameMode = 'solo';
     startGame();
   });
-}
-if (duelModeBtn) {
+  
   duelModeBtn.addEventListener('click', () => {
     gameMode = 'duel';
     startGame();
@@ -43,38 +48,51 @@ if (duelModeBtn) {
   });
 }
 
+// Fonction pour démarrer le jeu
 function startGame() {
-  document.getElementById('gameModeSelection').style.display = 'none';
+  gameModeSelection.style.display = 'none';
   gameArea.style.display = 'block';
   feedback.innerHTML = '';
+  guessInput.value = '';
   if (gameMode === 'solo') {
     socket.emit('startSoloGame');
     chatBox.style.display = 'none';
     historySection.style.display = 'block';
+    historyList.innerHTML = '';
   } else if (gameMode === 'duel') {
-    chatBox.style.display = 'none'; // Sera activé lors de la connexion à un duel
-    historySection.style.display = 'none'; // Historique non nécessaire en duel
+    chatBox.style.display = 'none'; // Le chat sera activé lorsque le duel commencera
+    historySection.style.display = 'none'; // Pas d'historique en mode duel
   }
 }
 
-// Soumettre une proposition
+// Gestion de l'événement du bouton "Valider"
 if (submitGuessBtn) {
-  submitGuessBtn.addEventListener('click', () => {
-    const guess = guessInput.value;
-    if (guess.length === 4 && /^[0-9]+$/.test(guess)) {
-      socket.emit('guess', guess);
-      guessInput.value = '';
-    } else {
-      alert('Veuillez entrer un code à 4 chiffres');
-    }
-  });
+  submitGuessBtn.addEventListener('click', submitGuess);
 }
 
-// Recevoir le feedback du serveur
+// Permettre la soumission avec la touche Entrée
+guessInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    submitGuess();
+  }
+});
+
+// Fonction pour soumettre une proposition
+function submitGuess() {
+  const guess = guessInput.value.trim();
+  if (guess.length === 4 && /^\d{4}$/.test(guess)) {
+    socket.emit('guess', guess);
+    guessInput.value = '';
+  } else {
+    alert('Veuillez entrer un code à 4 chiffres');
+  }
+}
+
+// Réception des feedbacks du serveur
 socket.on('feedback', (data) => {
   feedback.innerHTML += `<p>${data}</p>`;
   feedback.scrollTop = feedback.scrollHeight;
-
+  
   if (gameMode === 'solo') {
     // Ajouter à l'historique en mode solo
     const listItem = document.createElement('li');
@@ -83,12 +101,12 @@ socket.on('feedback', (data) => {
   }
 });
 
-// Activer le chat en mode duel
+// Activation du chat en mode duel
 socket.on('enableChat', () => {
   chatBox.style.display = 'block';
 });
 
-// Affichage du vainqueur
+// Gestion de la fin de la partie
 socket.on('gameOver', (message) => {
   alert(message);
   resetGame();
@@ -102,11 +120,43 @@ if (chatInput) {
       chatInput.value = '';
     }
   });
-
+  
   socket.on('chatMessage', (data) => {
     messages.innerHTML += `<p><strong>${data.user} :</strong> ${data.message}</p>`;
     messages.scrollTop = messages.scrollHeight;
   });
+}
+
+// Bouton "Abandonner"
+if (abandonBtn) {
+  abandonBtn.addEventListener('click', () => {
+    if (confirm('Voulez-vous vraiment abandonner la partie ?')) {
+      socket.emit('abandon');
+      resetGame();
+    }
+  });
+}
+
+// Bouton "Retour"
+if (returnBtn) {
+  returnBtn.addEventListener('click', () => {
+    socket.emit('leaveGame');
+    resetGame();
+  });
+});
+
+// Fonction pour réinitialiser le jeu
+function resetGame() {
+  gameArea.style.display = 'none';
+  gameModeSelection.style.display = 'block';
+  feedback.innerHTML = '';
+  historyList.innerHTML = '';
+  messages.innerHTML = '';
+  guessInput.value = '';
+  chatInput.value = '';
+  chatBox.style.display = 'none';
+  historySection.style.display = 'none';
+  gameMode = '';
 }
 
 // Notifications
@@ -114,6 +164,7 @@ socket.on('notification', (data) => {
   displayNotification(data.message);
 });
 
+// Fonction pour afficher une notification
 function displayNotification(message) {
   const notification = document.createElement('div');
   notification.className = 'notification';
@@ -129,40 +180,9 @@ socket.on('welcome', (message) => {
   displayNotification(message);
 });
 
-// Bouton d'abandon
-if (abandonBtn) {
-  abandonBtn.addEventListener('click', () => {
-    if (confirm('Voulez-vous vraiment abandonner la partie ?')) {
-      socket.emit('abandon');
-      resetGame();
-    }
-  });
-}
-
-// Bouton retour
-if (returnBtn) {
-  returnBtn.addEventListener('click', () => {
-    resetGame();
-  });
-}
-
-// Fonction pour réinitialiser le jeu
-function resetGame() {
-  gameArea.style.display = 'none';
-  document.getElementById('gameModeSelection').style.display = 'block';
-  feedback.innerHTML = '';
-  historyList.innerHTML = '';
-  chatBox.style.display = 'none';
-  historySection.style.display = 'none';
-}
-
 // Gestion de la déconnexion de l'adversaire
 socket.on('opponentLeft', (message) => {
   alert(message);
   resetGame();
 });
 
-// Désactiver le chat si le joueur quitte le mode duel
-window.addEventListener('beforeunload', () => {
-  socket.emit('leaveGame');
-});
