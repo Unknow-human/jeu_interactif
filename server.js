@@ -8,19 +8,21 @@ const bcrypt = require('bcrypt');
 const compression = require('compression');
 const fs = require('fs');
 
-// Utiliser memorystore pour stocker les sessions en mémoire
 const MemoryStore = require('memorystore')(session);
+
+// Charger le secret depuis les variables d'environnement
+const sessionSecret =  ''e729ffd39b8d6ab337f8c5a9d2a1c6e6f5a3930e8c4183c59e1a492bbcd6d97e6ea8b7365d0c91f2d92f3156b34cd11db7f89e5bb324ef16b2bf8a3e6d4a90f5'';
 
 // Configuration du serveur
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
-const sessionSecret = 'e729ffd39b8d6ab337f8c5a9d2a1c6e6f5a3930e8c4183c59e1a492bbcd6d97e6ea8b7365d0c91f2d92f3156b34cd11db7f89e5bb324ef16b2bf8a3e6d4a90f5';
+
 // Configuration de la session
 app.use(session({
-  secret: sessionSecret, // Remplacez par une chaîne secrète sécurisée
-  resave: false, // Ne sauvegarde la session que si elle a été modifiée
+  secret: sessionSecret,
+  resave: false, // Empêche de sauvegarder la session à chaque requête si elle n'a pas été modifiée
   saveUninitialized: false, // Ne sauvegarde pas les sessions non initialisées
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 // Durée de vie du cookie de session (ici, 1 jour)
@@ -246,115 +248,113 @@ io.on('connection', (socket) => {
     }
     socket.emit('gameOver', 'Vous avez abandonné la partie.');
   });
-
   // Déconnexion du joueur
-socket.on('disconnect', () => {
-          if (socket.game && socket.game.mode === 'duel') {
-            const opponentSocket = io.sockets.sockets.get(socket.game.opponentId);
-            if (opponentSocket) {
-              opponentSocket.emit('opponentLeft', `🏆 Vous avez gagné ! ${socket.username} a quitté la partie.`);
-              updateScore(opponentSocket.username, 'duel');
-              delete opponentSocket.game;
-            }
-            delete socket.game;
-          }
-    
-          // Retirer le joueur de la file d'attente s'il y est
-          waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
-    
-          // Mise à jour des utilisateurs en ligne
-          delete onlineUsers[socket.username];
-          io.emit('updateOnlineUsers', Object.keys(onlineUsers));
-        });
-    
-        // Gestion de la déconnexion volontaire
-        socket.on('leaveGame', () => {
-          if (socket.game && socket.game.mode === 'duel') {
-            const opponentSocket = io.sockets.sockets.get(socket.game.opponentId);
-            if (opponentSocket) {
-              opponentSocket.emit('opponentLeft', `🏆 Vous avez gagné ! ${socket.username} a quitté la partie.`);
-              updateScore(opponentSocket.username, 'duel');
-              delete opponentSocket.game;
-            }
-            delete socket.game;
-          }
-    
-          // Retirer le joueur de la file d'attente s'il y est
-          waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
-        });
-    
-        // Fonction pour démarrer un duel
-        function startDuel(player1, player2) {
-          const gameId = `game-${player1.id}-${player2.id}`;
-          player1.join(gameId);
-          player2.join(gameId);
-    
-          const secretCode1 = generateSecretCode();
-          const secretCode2 = generateSecretCode();
-    
-          player1.game = {
-            mode: 'duel',
-            secretCode: secretCode2, // Deviner le code de l'adversaire
-            attempts: 0,
-            opponentId: player2.id,
-            gameId: gameId
-          };
-    
-          player2.game = {
-            mode: 'duel',
-            secretCode: secretCode1,
-            attempts: 0,
-            opponentId: player1.id,
-            gameId: gameId
-          };
-    
-          player1.emit('feedback', `🎮 Duel commencé contre ${player2.username}. Bonne chance !`);
-          player2.emit('feedback', `🎮 Duel commencé contre ${player1.username}. Bonne chance !`);
-    
-          // Activer le chat
-          io.to(gameId).emit('enableChat');
-        }
-    
-        // Fonctions auxiliaires
-        function generateSecretCode() {
-          let code = '';
-          while (code.length < 4) {
-            const digit = Math.floor(Math.random() * 10).toString();
-            if (!code.includes(digit)) {
-              code += digit;
-            }
-          }
-          return code;
-        }
-    
-        function checkGuess(guess, secretCode) {
-          let wellPlaced = 0;
-          let correctDigits = 0;
-          for (let i = 0; i < 4; i++) {
-            if (guess[i] === secretCode[i]) {
-              wellPlaced++;
-            } else if (secretCode.includes(guess[i])) {
-              correctDigits++;
-            }
-          }
-          return `${wellPlaced} chiffres corrects et bien placés, ${correctDigits} chiffres corrects mais mal placés`;
-        }
-    
-        function updateScore(username, result) {
-          const user = users.find(u => u.username === username);
-          if (user) {
-            if (result === 'solo') {
-              user.score += 5;
-            } else if (result === 'duel') {
-              user.score += 10;
-            }
-            fs.writeFileSync('users.json', JSON.stringify(users));
-            io.emit('updateLeaderboard', getLeaderboard());
-          }
-        }
+  socket.on('disconnect', () => {
+    if (socket.game && socket.game.mode === 'duel') {
+      const opponentSocket = io.sockets.sockets.get(socket.game.opponentId);
+      if (opponentSocket) {
+        opponentSocket.emit('opponentLeft', `🏆 Vous avez gagné ! ${socket.username} a quitté la partie.`);
+        updateScore(opponentSocket.username, 'duel');
+        delete opponentSocket.game;
+      }
+      delete socket.game;
+    }
 
-  
-        function getLeaderboard() {
-          return users.sort((a, b) => b.score - a.score).slice(0, 10);
-        }
-      });
+    // Retirer le joueur de la file d'attente s'il y est
+    waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
+
+    // Mise à jour des utilisateurs en ligne
+    delete onlineUsers[socket.username];
+    io.emit('updateOnlineUsers', Object.keys(onlineUsers));
+  });
+
+  // Gestion de la déconnexion volontaire
+  socket.on('leaveGame', () => {
+    if (socket.game && socket.game.mode === 'duel') {
+      const opponentSocket = io.sockets.sockets.get(socket.game.opponentId);
+      if (opponentSocket) {
+        opponentSocket.emit('opponentLeft', `🏆 Vous avez gagné ! ${socket.username} a quitté la partie.`);
+        updateScore(opponentSocket.username, 'duel');
+        delete opponentSocket.game;
+      }
+      delete socket.game;
+    }
+
+    // Retirer le joueur de la file d'attente s'il y est
+    waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
+  });
+
+  // Fonction pour démarrer un duel
+  function startDuel(player1, player2) {
+    const gameId = `game-${player1.id}-${player2.id}`;
+    player1.join(gameId);
+    player2.join(gameId);
+
+    const secretCode1 = generateSecretCode();
+    const secretCode2 = generateSecretCode();
+
+    player1.game = {
+      mode: 'duel',
+      secretCode: secretCode2, // Deviner le code de l'adversaire
+      attempts: 0,
+      opponentId: player2.id,
+      gameId: gameId
+    };
+
+    player2.game = {
+      mode: 'duel',
+      secretCode: secretCode1,
+      attempts: 0,
+      opponentId: player1.id,
+      gameId: gameId
+    };
+
+    player1.emit('feedback', `🎮 Duel commencé contre ${player2.username}. Bonne chance !`);
+    player2.emit('feedback', `🎮 Duel commencé contre ${player1.username}. Bonne chance !`);
+
+    // Activer le chat
+    io.to(gameId).emit('enableChat');
+  }
+
+  // Fonctions auxiliaires
+  function generateSecretCode() {
+    let code = '';
+    while (code.length < 4) {
+      const digit = Math.floor(Math.random() * 10).toString();
+      if (!code.includes(digit)) {
+        code += digit;
+      }
+    }
+    return code;
+  }
+
+  function checkGuess(guess, secretCode) {
+    let wellPlaced = 0;
+    let correctDigits = 0;
+    for (let i = 0; i < 4; i++) {
+      if (guess[i] === secretCode[i]) {
+        wellPlaced++;
+      } else if (secretCode.includes(guess[i])) {
+        correctDigits++;
+      }
+    }
+    return `${wellPlaced} chiffres corrects et bien placés, ${correctDigits} chiffres corrects mais mal placés`;
+  }
+
+  function updateScore(username, result) {
+    const user = users.find(u => u.username === username);
+    if (user) {
+      if (result === 'solo') {
+        user.score += 5;
+      } else if (result === 'duel') {
+        user.score += 10;
+      }
+      fs.writeFileSync('users.json', JSON.stringify(users));
+      io.emit('updateLeaderboard', getLeaderboard());
+    }
+  }
+
+  function getLeaderboard() {
+    return users.sort((a, b) => b.score - a.score).slice(0, 10);
+  }
+});
