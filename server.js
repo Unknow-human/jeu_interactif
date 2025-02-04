@@ -11,7 +11,7 @@ const fs = require('fs');
 const MemoryStore = require('memorystore')(session);
 
 // Charger le secret depuis les variables d'environnement
-const sessionSecret =  ''e729ffd39b8d6ab337f8c5a9d2a1c6e6f5a3930e8c4183c59e1a492bbcd6d97e6ea8b7365d0c91f2d92f3156b34cd11db7f89e5bb324ef16b2bf8a3e6d4a90f5'';
+const sessionSecret =  'e729ffd39b8d6ab337f8c5a9d2a1c6e6f5a3930e8c4183c59e1a492bbcd6d97e6ea8b7365d0c91f2d92f3156b34cd11db7f89e5bb324ef16b2bf8a3e6d4a90f5';
 
 // Configuration du serveur
 app.use(express.urlencoded({ extended: true }));
