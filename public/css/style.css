@@ -1,4 +1,3 @@
-/* public/css/style.css */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
@@ -186,7 +185,7 @@ input[type="password"]::placeholder {
 }
 
 #messages {
-  height: 200px;
+  height: 400px; /* Ajuster la hauteur pour voir plus de messages */
   overflow-y: scroll;
   background-color: rgba(255, 255, 255, 0.1);
   padding: 10px;
@@ -195,7 +194,7 @@ input[type="password"]::placeholder {
 }
 
 #chatInput {
-  width: 80%;
+  width: 90%;
   padding: 10px;
   font-size: 16px;
   border: 2px solid #ff6b6b;
@@ -267,8 +266,6 @@ table tr:nth-child(even) {
 .top-menu .btn:hover {
   text-decoration: underline;
 }
-/* public/css/style.css */
-/* ... (styles existants) ... */
 
 /* Styles pour les boutons dans le jeu */
 .game-buttons {
@@ -293,60 +290,142 @@ table tr:nth-child(even) {
   margin-top: 20px;
 }
 
-/* Autres styles nécessaires pour les nouveaux éléments */
+/* Responsive Design */
+@media (max-width: 768px) {
+  .top-menu {
+    flex-direction: column;
+    align-items: center;
+  }
 
-/* Styles pour le menu en haut */
-.top-menu {
-  display: flex;
-  justify-content: flex-end;
-  background-color: #333;
-  padding: 10px;
+  .top-menu .btn {
+    margin: 5px 0;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+  }
+
+  #chatBox,
+  #messages,
+  #feedback {
+    width: 100%;
+    max-width: none;
+  }
+
+  .game-area {
+    flex-direction: column;
+  }
+
+  .game-left,
+  .game-right {
+    width: 100%;
+  }
+}
+/* Responsive Design (Suite) */
+@media (max-width: 768px) {
+  .game-area {
+    flex-direction: column;
+  }
+
+  .game-left, .game-right {
+    width: 100%;
+  }
+
+  #chatBox, #messages, #feedback {
+    width: 100%;
+    max-width: none;
+  }
+
+  .btn {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .container {
+    padding: 10px;
+  }
 }
 
-.top-menu .btn {
-  color: white;
-  text-decoration: none;
-  margin: 0 10px;
+/* Ajustements pour les très petits écrans */
+@media (max-width: 480px) {
+  .btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .top-menu {
+    padding: 5px;
+  }
+
+  .top-menu .btn {
+    margin: 3px 0;
+  }
 }
 
-.top-menu .btn:hover {
-  text-decoration: underline;
-}
-
-/* Disposition de la zone de jeu et du chat */
-.game-area {
-  display: flex;
-  justify-content: space-between;
-}
-
-.game-left {
-  flex: 2;
+/* Styles Spécifiques pour les Pages */
+.page-login, .page-register, .page-profile, .page-help, .page-leaderboard, .page-game {
+  background-color: #2c2c2c;
+  color: #ffffff;
   padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.game-right {
-  flex: 1;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-left: 1px solid #ddd;
-  color: #000; /* Ajuster la couleur du texte pour le chat */
+.page-login h1, .page-register h1, .page-profile h1, .page-help h1, .page-leaderboard h1, .page-game h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
 }
 
-#messages {
-  height: 400px; /* Ajuster la hauteur pour voir plus de messages */
-  overflow-y: scroll;
-  background-color: rgba(255, 255, 255, 0.1);
+.page-login p, .page-register p, .page-profile p, .page-help p, .page-leaderboard p, .page-game p {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Animation de Chargement */
+@keyframes loadingAnimation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #fff;
+  width: 40px;
+  height: 40px;
+  animation: loadingAnimation 2s linear infinite;
+  margin: 20px auto;
+}
+
+/* Tableaux Améliorés */
+table th, table td {
+  border: 1px solid #dddddd;
   padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
 }
 
-#chatInput {
-  width: 90%;
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #ff6b6b;
-  border-radius: 30px;
-  background-color: transparent;
-  color: inherit;
+table th {
+  background-color: #ff6b6b;
+  color: #ffffff;
 }
+
+table tr:nth-child(even) {
+  background-color: #333333;
+}
+
