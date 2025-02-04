@@ -4,11 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <title>Aide - Devinez le Code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+  <!-- Menu en Haut -->
+  <div class="top-menu">
+    <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
+    <a href="/logout" class="btn btn-secondary">Déconnexion</a>
+    <a href="game.html" class="btn btn-return">Retour au jeu</a>
+    <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+  </div>
+
   <div class="container fade-in">
     <h1>Aide</h1>
     <p>Le but du jeu est de deviner un code secret de 4 chiffres.</p>
@@ -23,6 +30,7 @@
       <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
     </div>
   </div>
+
   <script src="../js/main.js"></script>
 </body>
 </html>
