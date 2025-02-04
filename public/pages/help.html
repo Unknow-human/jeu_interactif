@@ -8,29 +8,48 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <!-- Menu en Haut (Affiché si l'utilisateur est connecté) -->
-  <div id="topMenu" class="top-menu" style="display: none;">
-    <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
-    <a href="leaderboard.html" class="btn btn-secondary">Classement</a>
-    <a href="/logout" class="btn btn-secondary">Déconnexion</a>
-    <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+  <div class="app-wrapper">
+    <header class="app-header">
+      <h1>Numéno 4</h1>
+    </header>
+    <main class="app-main">
+      <h2>Aide</h2>
+      <p>Le but du jeu est de deviner un code secret de 4 chiffres.</p>
+      <p>Après chaque tentative, vous recevrez des indications :</p>
+      <ul>
+        <li><strong>Chiffres corrects et bien placés</strong> : Le nombre de chiffres que vous avez bien positionnés.</li>
+        <li><strong>Chiffres corrects mais mal placés</strong> : Les chiffres corrects mais à la mauvaise position.</li>
+      </ul>
+      <p>Le premier joueur à trouver le code exact remporte la partie !</p>
+      <div class="buttons">
+        <a href="index.html" class="btn btn-return">Retour à l'accueil</a>
+        <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+      </div>
+    </main>
+    <nav class="app-nav">
+      <a href="index.html" class="nav-link">
+        <img src="../img/home.svg" alt="Accueil">
+        <span>Accueil</span>
+      </a>
+      <a href="profile.html" class="nav-link">
+        <img src="../img/profile.svg" alt="Profil">
+        <span>Profil</span>
+      </a>
+      <a href="leaderboard.html" class="nav-link">
+        <img src="../img/leaderboard.svg" alt="Classement">
+        <span>Classement</span>
+      </a>
+      <a href="game.html" class="nav-link">
+        <img src="../img/game.svg" alt="Jeu">
+        <span>Jeu</span>
+      </a>
+      <a href="/logout" class="nav-link">
+        <img src="../img/logout.svg" alt="Déconnexion">
+        <span>Déconnexion</span>
+      </a>
+    </nav>
   </div>
-
-  <div class="container fade-in">
-    <h1>Aide</h1>
-    <p>Le but du jeu est de deviner un code secret de 4 chiffres.</p>
-    <p>Après chaque tentative, vous recevrez des indications :</p>
-    <ul>
-      <li><strong>Chiffres corrects et bien placés</strong> : Le nombre de chiffres que vous avez bien positionnés.</li>
-      <li><strong>Chiffres corrects mais mal placés</strong> : Les chiffres corrects mais à la mauvaise position.</li>
-    </ul>
-    <p>Le premier joueur à trouver le code exact remporte la partie !</p>
-    <div class="buttons">
-      <a href="index.html" class="btn btn-return">Retour à l'accueil</a>
-      <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
-    </div>
-  </div>
-
   <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
 </body>
 </html>
