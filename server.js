@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
@@ -16,7 +14,7 @@ app.use(express.json());
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'ton_secret', // Change ce secret en production
+  secret: 'ton_secret',
   resave: false,
   saveUninitialized: true
 }));
@@ -40,40 +38,59 @@ let onlineUsers = {}; // { username: socket.id }
 let waitingPlayers = []; // File d'attente pour le matchmaking
 let games = {}; // Parties en cours
 
-// Routes
+// Routes pour les pages statiques
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/pages/index.html');
+});
+
+app.get('/login.html', (req, res) => {
+  res.sendFile(__dirname + '/public/pages/login.html');
+});
+
+app.get('/register.html', (req, res) => {
+  res.sendFile(__dirname + '/public/pages/register.html');
+});
+
+app.get('/game.html', isAuthenticated, (req, res) => {
+  res.sendFile(__dirname + '/public/pages/game.html');
+});
+
+app.get('/help.html', (req, res) => {
+  res.sendFile(__dirname + '/public/pages/help.html');
+});
+
+app.get('/leaderboard.html', isAuthenticated, (req, res) => {
+  res.sendFile(__dirname + '/public/pages/leaderboard.html');
+});
+
+app.get('/profile.html', isAuthenticated, (req, res) => {
+  res.sendFile(__dirname + '/public/pages/profile.html');
 });
 
 // Routes d'authentification
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
-  // Validation des entrées
   if (!username || !password) {
     return res.send('Veuillez remplir tous les champs');
   }
-  // Vérifier si l'utilisateur existe déjà
   if (users.find(user => user.username === username)) {
     return res.send('Le nom d\'utilisateur existe déjà');
   }
-  // Hasher le mot de passe
   const hashedPassword = await bcrypt.hash(password, 10);
-  // Ajouter l'utilisateur
   users.push({ username, password: hashedPassword, score: 0, rewards: [] });
   fs.writeFileSync('users.json', JSON.stringify(users));
-  res.redirect('/pages/login.html');
+  res.redirect('/login.html');
 });
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  // Validation des entrées
   if (!username || !password) {
     return res.send('Veuillez remplir tous les champs');
   }
   const user = users.find(user => user.username === username);
   if (user && await bcrypt.compare(password, user.password)) {
     req.session.user = { username: user.username };
-    res.redirect('/pages/game.html');
+    res.redirect('/game.html');
   } else {
     res.send('Identifiants incorrects');
   }
@@ -89,18 +106,9 @@ function isAuthenticated(req, res, next) {
   if (req.session.user) {
     next();
   } else {
-    res.redirect('/pages/login.html');
+    res.redirect('/login.html');
   }
 }
-
-// Routes protégées
-app.get('/pages/game.html', isAuthenticated, (req, res) => {
-  res.sendFile(__dirname + '/public/pages/game.html');
-});
-
-app.get('/pages/profile.html', isAuthenticated, (req, res) => {
-  res.sendFile(__dirname + '/public/pages/profile.html');
-});
 
 // Route pour les données du classement
 app.get('/leaderboardData', (req, res) => {
