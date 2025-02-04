@@ -8,24 +8,45 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <!-- Menu en Haut (Affiché si l'utilisateur est connecté) -->
-  <div id="topMenu" class="top-menu" style="display: none;">
-    <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
-    <a href="leaderboard.html" class="btn btn-secondary">Classement</a>
-    <a href="/logout" class="btn btn-secondary">Déconnexion</a>
-    <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
+  <div class="app-wrapper">
+    <header class="app-header">
+      <h1>Numéno 4</h1>
+    </header>
+    <main class="app-main">
+      <div class="welcome">
+        <h2>Bienvenue sur Numéno 4</h2>
+        <p>Prêt à deviner le code secret?</p>
+      </div>
+      <div class="buttons">
+        <a href="login.html" class="btn">Connexion</a>
+        <a href="register.html" class="btn">Inscription</a>
+        <a href="help.html" class="btn btn-return">Aide</a>
+      </div>
+    </main>
+    <nav class="app-nav">
+      <a href="index.html" class="nav-link">
+        <img src="../img/home.svg" alt="Accueil">
+        <span>Accueil</span>
+      </a>
+      <a href="profile.html" class="nav-link">
+        <img src="../img/profile.svg" alt="Profil">
+        <span>Profil</span>
+      </a>
+      <a href="leaderboard.html" class="nav-link">
+        <img src="../img/leaderboard.svg" alt="Classement">
+        <span>Classement</span>
+      </a>
+      <a href="game.html" class="nav-link">
+        <img src="../img/game.svg" alt="Jeu">
+        <span>Jeu</span>
+      </a>
+      <a href="/logout" class="nav-link">
+        <img src="../img/logout.svg" alt="Déconnexion">
+        <span>Déconnexion</span>
+      </a>
+    </nav>
   </div>
-
-  <div class="container fade-in">
-    <h1>Numéno 4</h1>
-    <p>Bienvenue sur le jeu Numéno 4 !</p>
-    <div class="buttons">
-      <a href="login.html" class="btn">Connexion</a>
-      <a href="register.html" class="btn">Inscription</a>
-      <a href="help.html" class="btn btn-return">Aide</a>
-    </div>
-  </div>
-
   <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
 </body>
 </html>
