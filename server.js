@@ -1,3 +1,5 @@
+// server.js
+
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
@@ -14,7 +16,7 @@ app.use(express.json());
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'ton_secret',
+  secret: 'ton_secret', // Change ce secret en production
   resave: false,
   saveUninitialized: true
 }));
@@ -40,10 +42,6 @@ let games = {}; // Parties en cours
 
 // Routes pour les pages statiques
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/pages/index.html');
-});
-
-app.get('/index.html', (req, res) => {
   res.sendFile(__dirname + '/public/pages/index.html');
 });
 
@@ -74,13 +72,17 @@ app.get('/profile.html', isAuthenticated, (req, res) => {
 // Routes d'authentification
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
+  // Validation des entrées
   if (!username || !password) {
-    return res.send('Veuillez remplir tous les champs');
+    return res.send('Veuillez remplir tous les champs.');
   }
+  // Vérifier si l'utilisateur existe déjà
   if (users.find(user => user.username === username)) {
-    return res.send('Le nom d\'utilisateur existe déjà');
+    return res.send('Le nom d\'utilisateur existe déjà.');
   }
+  // Hasher le mot de passe
   const hashedPassword = await bcrypt.hash(password, 10);
+  // Ajouter l'utilisateur
   users.push({ username, password: hashedPassword, score: 0, rewards: [] });
   fs.writeFileSync('users.json', JSON.stringify(users));
   res.redirect('/login.html');
@@ -88,15 +90,16 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  // Validation des entrées
   if (!username || !password) {
-    return res.send('Veuillez remplir tous les champs');
+    return res.send('Veuillez remplir tous les champs.');
   }
   const user = users.find(user => user.username === username);
   if (user && await bcrypt.compare(password, user.password)) {
     req.session.user = { username: user.username };
     res.redirect('/game.html');
   } else {
-    res.send('Identifiants incorrects');
+    res.send('Identifiants incorrects.');
   }
 });
 
@@ -137,27 +140,33 @@ http.listen(PORT, () => {
 });
 
 // Gestion des sockets
+io.use((socket, next) => {
+  // Gestion de la session avec socket.io
+  session(socket.request, socket.request.res || {}, next);
+});
+
 io.on('connection', (socket) => {
-  // Gestion des sessions avec les sockets
-  let session = socket.request.session;
-  if (session && session.user) {
-    const username = session.user.username;
-    const user = users.find(u => u.username === username);
-    if (user) {
-      socket.username = username;
-      onlineUsers[username] = socket.id;
-      socket.emit('updateOnlineUsers', Object.keys(onlineUsers));
-      socket.emit('updateLeaderboard', getLeaderboard());
-      socket.emit('welcome', `Bienvenue ${username} !`);
-    }
+  // Vérifier si l'utilisateur est authentifié
+  const session = socket.request.session;
+  if (!session || !session.user) {
+    console.log('Utilisateur non authentifié, déconnexion du socket.');
+    return socket.disconnect(true);
+  }
+
+  const username = session.user.username;
+  const user = users.find(u => u.username === username);
+
+  if (user) {
+    socket.username = username;
+    onlineUsers[username] = socket.id;
+    socket.emit('welcome', `Bienvenue ${username} !`);
+    io.emit('updateOnlineUsers', Object.keys(onlineUsers));
   } else {
-    // Déconnecter le socket si pas de session utilisateur
-    socket.disconnect(true);
-    return;
+    return socket.disconnect(true);
   }
 
   // Démarrer une partie solo
-   socket.on('startSoloGame', () => {
+  socket.on('startSoloGame', () => {
     socket.game = {
       mode: 'solo',
       secretCode: generateSecretCode(),
@@ -168,14 +177,15 @@ io.on('connection', (socket) => {
 
   // Rejoindre le matchmaking pour le duel
   socket.on('findMatch', () => {
-    socket.game = { mode: 'duel' };
-    waitingPlayers.push(socket);
+    if (!waitingPlayers.includes(socket)) {
+      waitingPlayers.push(socket);
+      socket.emit('feedback', 'En attente d\'un adversaire...');
+    }
+
     if (waitingPlayers.length >= 2) {
       const player1 = waitingPlayers.shift();
       const player2 = waitingPlayers.shift();
       startDuel(player1, player2);
-    } else {
-      socket.emit('feedback', 'En attente d\'un adversaire...');
     }
   });
 
@@ -184,91 +194,91 @@ io.on('connection', (socket) => {
     if (socket.game && socket.game.mode === 'solo') {
       let result = checkGuess(guess, socket.game.secretCode);
       socket.game.attempts++;
-      socket.emit('feedback', `Vous avez proposé ${guess} : ${result}`);
+      socket.emit('feedback', `Tentative ${socket.game.attempts} - ${guess} : ${result}`);
 
-      // Vérifier si le joueur a gagné
-      if (result.includes('4 chiffre(s) correct(s) et bien placé(s)')) {
+      if (result.includes('4 chiffres corrects et bien placés')) {
         socket.emit('gameOver', '🎉 Félicitations, vous avez gagné en mode solo !');
         updateScore(socket.username, 'solo');
+        delete socket.game;
       }
-    }
-    else if (socket.game && socket.game.mode === 'duel') {
-    if (!socket.game || !guess || guess.length !== 4 || !/^\d{4}$/.test(guess)) {
-      return socket.emit('feedback', 'Entrée invalide.');
-    }
+    } else if (socket.game && socket.game.mode === 'duel') {
+      let result = checkGuess(guess, socket.game.secretCode);
+      socket.game.attempts++;
+      socket.emit('feedback', `Tentative ${socket.game.attempts} - ${guess} : ${result}`);
 
-    socket.game.attempts++;
-    let result = checkGuess(guess, socket.game.secretCode);
-    socket.emit('feedback', `Tentative ${socket.game.attempts}: ${result}`);
+      if (result.includes('4 chiffres corrects et bien placés')) {
+        socket.emit('gameOver', '🎉 Vous avez gagné le duel !');
+        updateScore(socket.username, 'duel');
 
-    if (result.includes('4 chiffres corrects et bien placés')) {
-      socket.emit('gameOver', '🎉 Félicitations, vous avez gagné !');
-      // Mettre à jour le score
-      updateScore(socket.username, socket.game.mode);
-      // Informer l'adversaire en mode duel
-      if (socket.game.mode === 'duel') {
         const opponentSocket = io.sockets.sockets.get(socket.game.opponentId);
         if (opponentSocket) {
-          opponentSocket.emit('gameOver', `😢 Vous avez perdu ! ${socket.username} a gagné la partie.`);
-          // Mettre à jour le score de l'adversaire
-          updateScore(opponentSocket.username, 'defeat'); } } }
+          opponentSocket.emit('gameOver', `😢 Vous avez perdu le duel. ${socket.username} a trouvé votre code.`);
+          delete opponentSocket.game;
+        }
+
+        delete socket.game;
+      }
     }
   });
 
   // Gestion du chat
-
-// Gestion du chat
-socket.on('chatMessage', (message) => {
-  if (socket.game && socket.game.gameId) {
-    // Envoyer le message uniquement aux joueurs de la partie en cours
-    io.to(socket.game.gameId).emit('chatMessage', { user: socket.username, message });
-  } else {
-    // Optionnel : permettre aux utilisateurs de discuter dans un chat général
-    socket.emit('feedback', '⚠️ Vous devez être en jeu pour envoyer des messages.');
-  }
-
-  if (message.length > 200) {
-    message = message.substring(0, 200) + '...';
-  }
-  // Optionnel : Filtrer les mots inappropriés
-  // message = filterBadWords(message);
-
-  if (socket.game && socket.game.gameId) {
-    io.to(socket.game.gameId).emit('chatMessage', { user: socket.username, message });
-  } else {
-    socket.emit('feedback', '⚠️ Vous devez être en jeu pour envoyer des messages.');
-  }
-
-
-
-});
-
-
-  // Déconnexion
-  socket.on('disconnect', () => {
-    if (socket.username) {
-      delete onlineUsers[socket.username];
-      io.emit('updateOnlineUsers', Object.keys(onlineUsers));
+  socket.on('chatMessage', (message) => {
+    if (socket.game && socket.game.gameId) {
+      io.to(socket.game.gameId).emit('chatMessage', { user: socket.username, message });
     }
-    // Retirer le joueur de la file d'attente s'il s'y trouve
-    waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
-
-// Informer l'adversaire si en duel
-if (socket.game && socket.game.mode === 'duel') {
-  const opponentSocketId = socket.game.opponentId;
-  const opponentSocket = io.sockets.sockets.get(opponentSocketId);
-  if (opponentSocket) {
-    opponentSocket.emit('notification', { message: '⚠️ Votre adversaire a quitté la partie.' });
-    opponentSocket.emit('gameOver', 'Vous avez gagné par forfait de l\'adversaire.');
-    updateScore(opponentSocket.username, 'duel');
-  }
-}
-
   });
 
+  // Gestion de l'abandon
+  socket.on('abandon', () => {
+    if (socket.game && socket.game.mode === 'duel') {
+      const opponentSocket = io.sockets.sockets.get(socket.game.opponentId);
+      if (opponentSocket) {
+        opponentSocket.emit('gameOver', `🏆 Vous avez gagné ! ${socket.username} a abandonné le duel.`);
+        updateScore(opponentSocket.username, 'duel');
+        delete opponentSocket.game;
+      }
+      delete socket.game;
+    }
+    socket.emit('gameOver', 'Vous avez abandonné la partie.');
+  });
 
+  // Déconnexion du joueur
+  socket.on('disconnect', () => {
+    if (socket.game && socket.game.mode === 'duel') {
+      const opponentSocket = io.sockets.sockets.get(socket.game.opponentId);
+      if (opponentSocket) {
+        opponentSocket.emit('opponentLeft', `🏆 Vous avez gagné ! ${socket.username} a quitté la partie.`);
+        updateScore(opponentSocket.username, 'duel');
+        delete opponentSocket.game;
+      }
+      delete socket.game;
+    }
 
-  // Fonctions auxiliaires
+    // Retirer le joueur de la file d'attente s'il y est
+    waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
+
+    // Mise à jour des utilisateurs en ligne
+    delete onlineUsers[socket.username];
+    io.emit('updateOnlineUsers', Object.keys(onlineUsers));
+  });
+
+  // Gestion de la déconnexion volontaire
+  socket.on('leaveGame', () => {
+    if (socket.game && socket.game.mode === 'duel') {
+      const opponentSocket = io.sockets.sockets.get(socket.game.opponentId);
+      if (opponentSocket) {
+        opponentSocket.emit('opponentLeft', `🏆 Vous avez gagné ! ${socket.username} a quitté la partie.`);
+        updateScore(opponentSocket.username, 'duel');
+        delete opponentSocket.game;
+      }
+      delete socket.game;
+    }
+
+    // Retirer le joueur de la file d'attente s'il y est
+    waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
+  });
+
+  // Fonction pour démarrer un duel
   function startDuel(player1, player2) {
     const gameId = `game-${player1.id}-${player2.id}`;
     player1.join(gameId);
@@ -279,7 +289,7 @@ if (socket.game && socket.game.mode === 'duel') {
 
     player1.game = {
       mode: 'duel',
-      secretCode: secretCode2, // Le code que player1 doit deviner est celui de player2
+      secretCode: secretCode2, // Deviner le code de l'adversaire
       attempts: 0,
       opponentId: player2.id,
       gameId: gameId
@@ -287,43 +297,20 @@ if (socket.game && socket.game.mode === 'duel') {
 
     player2.game = {
       mode: 'duel',
-      secretCode: secretCode1, // Le code que player2 doit deviner est celui de player1
+      secretCode: secretCode1,
       attempts: 0,
       opponentId: player1.id,
       gameId: gameId
     };
 
-    io.to(gameId).emit('feedback', 'La partie en duel a commencé ! Bonne chance !');
+    player1.emit('feedback', `🎮 Duel commencé contre ${player2.username}. Bonne chance !`);
+    player2.emit('feedback', `🎮 Duel commencé contre ${player1.username}. Bonne chance !`);
+
+    // Activer le chat
+    io.to(gameId).emit('enableChat');
   }
 
-  function updateScore(username, result) {
-    const user = users.find(u => u.username === username);
-    if (user) {
-      if (result === 'solo') {
-        user.score += 5;
-        checkRewards(user);
-      } else if (result === 'duel') {
-        user.score += 10;
-        checkRewards(user);
-      } else if (result === 'defeat') {
-        user.score += 2;
-      }
-      fs.writeFileSync('users.json', JSON.stringify(users));
-      io.emit('updateLeaderboard', getLeaderboard());
-    }
-  }
-
-  function checkRewards(user) {
-    // Exemple de récompenses
-    if (user.score >= 50 && !user.rewards.includes('Champion')) {
-      user.rewards.push('Champion');
-      const socketId = onlineUsers[user.username];
-      if (socketId) {
-        io.to(socketId).emit('notification', { message: '🏆 Vous avez débloqué le badge Champion !' });
-      }
-    }
-  }
-
+  // Fonctions auxiliaires
   function generateSecretCode() {
     let code = '';
     while (code.length < 4) {
@@ -345,9 +332,22 @@ if (socket.game && socket.game.mode === 'duel') {
         correctDigits++;
       }
     }
-    return `${wellPlaced} chiffre(s) correct(s) et bien placé(s), ${correctDigits} chiffre(s) correct(s) mais mal placé(s)`;
+    return `${wellPlaced} chiffres corrects et bien placés, ${correctDigits} chiffres corrects mais mal placés`;
   }
 
+  function updateScore(username, result) {
+    const user = users.find(u => u.username === username);
+    if (user) {
+      if (result === 'solo') {
+        user.score += 5;
+      } else if (result === 'duel') {
+        user.score += 10;
+      }
+      fs.writeFileSync('users.json', JSON.stringify(users));
+      io.emit('updateLeaderboard', getLeaderboard());
+    }
+  }
+  
   function getLeaderboard() {
     return users.sort((a, b) => b.score - a.score).slice(0, 10);
   }
