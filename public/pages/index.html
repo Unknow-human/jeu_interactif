@@ -3,21 +3,28 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Numéno 4</title>
+  <title>Accueil - Devinez le Code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <div class="container fade-in">
-    <h1>Devinez le Code</h1>
-    <div class="buttons">
-      <a href="login.html" class="btn">Connexion</a>
-      <a href="register.html" class="btn">Inscription</a>
-      <a href="help.html" class="btn">Aide</a>
-    </div>
+  <!-- Menu en Haut -->
+  <div class="top-menu">
+    <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
+    <a href="/logout" class="btn btn-secondary">Déconnexion</a>
+    <a href="help.html" class="btn btn-return">Aide</a>
     <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
   </div>
+
+  <div class="container fade-in">
+    <h1>Devinez le Code</h1>
+    <p>Bienvenue sur le jeu Devinez le Code !</p>
+    <div id="gameModeSelection">
+      <button id="soloMode" class="btn">Mode Solo</button>
+      <button id="duelMode" class="btn">Mode Duel</button>
+    </div>
+  </div>
+
   <script src="../js/main.js"></script>
 </body>
 </html>
