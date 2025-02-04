@@ -151,7 +151,7 @@ http.listen(PORT, () => {
 // Gestion des sockets
 io.use((socket, next) => {
   // Gestion de la session avec socket.io
-  session(socket.request, {}, next);
+  sessionMiddleware(socket.request, {}, next);
 });
 
 io.on('connection', (socket) => {
