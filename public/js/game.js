@@ -37,11 +37,13 @@ fetch('/getUserInfo')
 // Gestion des événements pour les boutons du mode de jeu
 if (soloModeBtn && duelModeBtn) {
   soloModeBtn.addEventListener('click', () => {
+    console.log('bouton mode solo');
     gameMode = 'solo';
     startGame();
   });
   
   duelModeBtn.addEventListener('click', () => {
+     console.log('bouton mode duel');
     gameMode = 'duel';
     startGame();
     socket.emit('findMatch');
@@ -50,6 +52,7 @@ if (soloModeBtn && duelModeBtn) {
 
 // Fonction pour démarrer le jeu
 function startGame() {
+   console.log('fonction startGame() appeler en mode : ',gameMode);
   gameModeSelection.style.display = 'none';
   gameArea.style.display = 'block';
   feedback.innerHTML = '';
