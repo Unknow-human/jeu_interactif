@@ -8,21 +8,20 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <!-- Menu en Haut (visible seulement si connecté) -->
-  <div class="top-menu" id="topMenu">
+  <!-- Menu en Haut (Affiché si l'utilisateur est connecté) -->
+  <div id="topMenu" class="top-menu" style="display: none;">
     <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
     <a href="/logout" class="btn btn-secondary">Déconnexion</a>
-    <a href="help.html" class="btn btn-return">Aide</a>
     <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
   </div>
 
   <div class="container fade-in">
-    <h1>Classement</h1>
+    <h1>Classement des Joueurs</h1>
     <table>
       <thead>
         <tr>
           <th>Position</th>
-          <th>Nom d'utilisateur</th>
+          <th>Nom d'Utilisateur</th>
           <th>Score</th>
         </tr>
       </thead>
@@ -31,11 +30,25 @@
       </tbody>
     </table>
     <div class="buttons">
-      <a href="game.html" class="btn btn-return">Retour à l'accueil</a>
+      <a href="game.html" class="btn btn-return">Retour au jeu</a>
     </div>
   </div>
-  
+
   <script src="../js/main.js"></script>
   <script src="../js/leaderboard.js"></script>
+  <script>
+    // Script pour vérifier si l'utilisateur est connecté
+    fetch('/getUserInfo')
+      .then(response => {
+        if (response.ok) {
+          document.getElementById('topMenu').style.display = 'flex';
+        } else {
+          window.location.href = 'login.html';
+        }
+      })
+      .catch(error => {
+        window.location.href = 'login.html';
+      });
+  </script>
 </body>
 </html>
