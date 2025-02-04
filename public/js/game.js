@@ -143,7 +143,7 @@ if (returnBtn) {
     socket.emit('leaveGame');
     resetGame();
   });
-});
+};
 
 // Fonction pour réinitialiser le jeu
 function resetGame() {
