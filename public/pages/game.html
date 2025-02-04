@@ -3,21 +3,21 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Jeu - Devinez le Code</title>
+  <title>Jeu - Numéno 4</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <!-- Menu en Haut -->
+  <!-- Menu en Haut (L'utilisateur est supposé être connecté ici) -->
   <div class="top-menu">
     <a href="profile.html" class="btn btn-secondary">Mon Profil</a>
+    <a href="leaderboard.html" class="btn btn-secondary">Classement</a>
     <a href="/logout" class="btn btn-secondary">Déconnexion</a>
-    <a href="help.html" class="btn btn-return">Aide</a>
     <button id="toggleTheme" class="theme-btn">Changer de Thème</button>
   </div>
 
   <div class="container fade-in">
-    <h1>Devinez le Code</h1>
+    <h1>Numéno 4</h1>
     <div id="gameModeSelection">
       <button id="soloMode" class="btn">Mode Solo</button>
       <button id="duelMode" class="btn">Mode Duel</button>
@@ -28,13 +28,11 @@
         <input type="text" id="guessInput" maxlength="4">
         <button id="submitGuess" class="btn">Valider</button>
         <div id="feedback"></div>
-        <!-- Historique des tentatives -->
         <div id="history" style="display:none;">
           <h3>Historique des tentatives :</h3>
           <ul id="historyList"></ul>
         </div>
       </div>
-      <!-- Chat à Droite -->
       <div class="game-right">
         <div id="chatBox">
           <h3>Chat</h3>
