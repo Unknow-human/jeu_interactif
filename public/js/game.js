@@ -22,7 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatBox = document.getElementById('chatBox');
   const messages = document.getElementById('messages');
   const chatInput = document.getElementById('chatInput');
-  const abandonBtn = document.getElementById('abandonBtn');
+  const abandonBtnSolo = document.getElementById('abandonBtnSolo');
+  const abandonBtnDuel = document.getElementById('abandonBtnDuel');
   const returnBtn = document.getElementById('returnBtn');
 
   // Variables pour la saisie du code
@@ -60,14 +61,16 @@ document.addEventListener("DOMContentLoaded", () => {
       soloGameArea.style.display = 'block';
       duelGameArea.style.display = 'none';
       chatBox.style.display = 'none';
-      abandonBtn.style.display = 'block';
+      abandonBtnSolo.style.display = 'block';
+      abandonBtnDuel.style.display = 'none';
       returnBtn.style.display = 'block';
       socket.emit('startSoloGame');
     } else if (gameMode === 'duel') {
       soloGameArea.style.display = 'none';
       duelGameArea.style.display = 'block';
       chatBox.style.display = 'none'; // Le chat sera activé lorsque le duel commencera
-      abandonBtn.style.display = 'block';
+      abandonBtnSolo.style.display = 'none';
+      abandonBtnDuel.style.display = 'block';
       returnBtn.style.display = 'block';
       socket.emit('findMatch');
     }
@@ -126,12 +129,27 @@ document.addEventListener("DOMContentLoaded", () => {
       messageItem.innerHTML = `<strong>${data.user} :</strong> ${data.message}`;
       messages.appendChild(messageItem);
       messages.scrollTop = messages.scrollHeight;
+      // Notification pour les nouveaux messages de l'adversaire
+      if (data.user !== username) {
+        displayNotification('Nouveau message de votre adversaire');
+      }
     });
   }
 
-  // Bouton "Abandonner"
-  if (abandonBtn) {
-    abandonBtn.addEventListener('click', () => {
+  // Bouton "Abandonner" en mode solo
+  if (abandonBtnSolo) {
+    abandonBtnSolo.addEventListener('click', () => {
+      if (confirm('Voulez-vous vraiment abandonner la partie ?')) {
+        socket.emit('abandon');
+        resetGame();
+        gameModeSelection.style.display = 'block'; // Retourner à la sélection du mode de jeu
+      }
+    });
+  }
+
+  // Bouton "Abandonner" en mode duel
+  if (abandonBtnDuel) {
+    abandonBtnDuel.addEventListener('click', () => {
       if (confirm('Voulez-vous vraiment abandonner la partie ?')) {
         socket.emit('abandon');
         resetGame();
@@ -159,7 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
     currentGuess = '';
     chatInput.value = '';
     chatBox.style.display = 'none';
-    abandonBtn.style.display = 'none';
+    abandonBtnSolo.style.display = 'none';
+    abandonBtnDuel.style.display = 'none';
     returnBtn.style.display = 'none';
     gameMode = '';
   }
