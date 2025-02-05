@@ -26,28 +26,30 @@
           <ul id="historyListSolo" style="max-height: 150px; overflow-y: auto;"></ul>
         </div>
         <!-- Zone de saisie -->
-        <div class="input-container">
+                <div class="input-container">
           <input type="text" id="guessInputSolo" placeholder="Entrez un code à 4 chiffres">
           <button id="submitGuessSolo" class="btn">Valider</button>
         </div>
       </div>
 
       <!-- Zone de jeu pour le mode duel -->
-      <div id="duelGameArea" class="game-area" style="display:none;">
-        <!-- Historique des tentatives -->
-        <div class="game-history">
-          <h3>Historique des Tentatives :</h3>
-          <ul id="historyListDuel" style="max-height: 150px; overflow-y: auto;"></ul>
-        </div>
-        <!-- Zone de saisie et chat -->
-        <div class="input-container">
-          <input type="text" id="guessInputDuel" placeholder="Entrez un code à 4 chiffres">
-          <button id="submitGuessDuel" class="btn">Valider</button>
-          <div id="chatBox" class="game-chat">
-            <h3>Chat</h3>
-            <div id="messages" style="max-height: 100px; overflow-y: auto;"></div>
-            <input type="text" id="chatInput" placeholder="Envoyer un message...">
+      <div id="duelGameArea" class="game-area-duel" style="display:none;">
+        <div class="game-section">
+          <!-- Historique des tentatives -->
+          <div class="game-history">
+            <h3>Historique des Tentatives :</h3>
+            <ul id="historyListDuel" style="max-height: 150px; overflow-y: auto;"></ul>
           </div>
+          <!-- Zone de saisie -->
+          <div class="input-container">
+            <input type="text" id="guessInputDuel" placeholder="Entrez un code à 4 chiffres">
+            <button id="submitGuessDuel" class="btn">Valider</button>
+          </div>
+        </div>
+        <div class="game-chat">
+          <h3>Chat</h3>
+          <div id="messages" style="max-height: 100px; overflow-y: auto;"></div>
+          <input type="text" id="chatInput" placeholder="Envoyer un message...">
         </div>
       </div>
 
@@ -67,7 +69,7 @@
       <a href="leaderboard.html" class="nav-link fade-in">
         <span>Classement</span>
       </a>
-      <a href="help.html" class="nav-link fade-in">
+      <a href="halp.html" class="nav-link fade-in">
         <span>Aide</span>
       </a>
       <a href="/logout" class="nav-link fade-in">
