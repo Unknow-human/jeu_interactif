@@ -23,7 +23,7 @@
         <!-- Historique des tentatives -->
         <div class="game-history" id="historyListSolo">
           <h3>Historique des Tentatives :</h3>
-          <ul id="historyListSolo"></ul>
+          <ul id="historyListSolo" style="max-height: 200px; overflow-y: auto;"></ul>
         </div>
         <!-- Zone de saisie -->
         <div class="input-container">
@@ -37,7 +37,7 @@
         <!-- Historique des tentatives -->
         <div class="game-history" id="historyListDuel">
           <h3>Historique des Tentatives :</h3>
-          <ul id="historyListDuel"></ul>
+          <ul id="historyListDuel" style="max-height: 200px; overflow-y: auto;"></ul>
         </div>
         <!-- Zone de saisie et chat -->
         <div class="input-container">
@@ -45,7 +45,7 @@
           <button id="submitGuessDuel" class="btn">Valider</button>
           <div id="chatBox" class="game-chat">
             <h3>Chat</h3>
-            <div id="messages"></div>
+            <div id="messages" style="max-height: 150px; overflow-y: auto;"></div>
             <input type="text" id="chatInput" placeholder="Envoyer un message...">
           </div>
         </div>
