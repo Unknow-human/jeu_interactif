@@ -95,7 +95,9 @@ function submitGuess(inputElement) {
 // Réception des feedbacks du serveur
 socket.on('feedback', (data) => {
   const feedbackElement = (gameMode === 'solo') ? feedbackSolo : feedbackDuel;
-  feedbackElement.innerHTML += `<li>${data}</li>`;
+  const listItem = document.createElement('li');
+  listItem.textContent = data;
+  feedbackElement.appendChild(listItem);
   feedbackElement.scrollTop = feedbackElement.scrollHeight;
 });
 
@@ -120,7 +122,9 @@ if (chatInput) {
   });
   
   socket.on('chatMessage', (data) => {
-    messages.innerHTML += `<p><strong>${data.user} :</strong> ${data.message}</p>`;
+    const messageItem = document.createElement('p');
+    messageItem.innerHTML = `<strong>${data.user} :</strong> ${data.message}`;
+    messages.appendChild(messageItem);
     messages.scrollTop = messages.scrollHeight;
   });
 }
@@ -131,7 +135,7 @@ if (abandonBtn) {
     if (confirm('Voulez-vous vraiment abandonner la partie ?')) {
       socket.emit('abandon');
       resetGame();
-      window.location.href = 'index.html'; // Renvoyer à l'accueil
+      gameModeSelection.style.display = 'block'; // Retourner à la sélection du mode de jeu
     }
   });
 }
@@ -141,15 +145,14 @@ if (returnBtn) {
   returnBtn.addEventListener('click', () => {
     socket.emit('leaveGame');
     resetGame();
-    window.location.href = 'index.html'; // Renvoyer à l'accueil
+    gameModeSelection.style.display = 'block'; // Retourner à la sélection du mode de jeu
   });
-}
+});
 
 // Fonction pour réinitialiser le jeu
 function resetGame() {
   soloGameArea.style.display = 'none';
   duelGameArea.style.display = 'none';
-  gameModeSelection.style.display = 'block';
   feedbackSolo.innerHTML = '';
   feedbackDuel.innerHTML = '';
   messages.innerHTML = '';
@@ -186,5 +189,5 @@ socket.on('welcome', (message) => {
 socket.on('opponentLeft', (message) => {
   alert(message);
   resetGame();
-  window.location.href = 'index.html'; // Renvoyer à l'accueil
+  gameModeSelection.style.display = 'block'; // Retourner à la sélection du mode de jeu
 });
