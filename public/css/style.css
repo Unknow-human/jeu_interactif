@@ -20,8 +20,8 @@ body {
   background-color: #0078d4;
   color: #ffffff;
   text-align: center;
-  padding: 5px;
-  font-size: 14px;
+  padding: 10px;
+  font-size: 20px;
   font-weight: bold;
 }
 
@@ -260,6 +260,22 @@ body {
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
+}
+
+/* Alignement du chat et de la zone de jeu en mode duel */
+.game-area-duel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-area-duel .game-chat {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.game-area-duel .game-section {
+  flex: 1;
+  margin-right: 20px;
 }
 
 /* Thèmes additionnels */
