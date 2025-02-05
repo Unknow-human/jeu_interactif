@@ -12,16 +12,18 @@ const soloModeBtn = document.getElementById('soloMode');
 const duelModeBtn = document.getElementById('duelMode');
 const gameModeSelection = document.getElementById('gameModeSelection');
 const gameArea = document.getElementById('gameArea');
-const guessInput = document.getElementById('guessInput');
+const gameWheel = document.getElementById('gameWheel');
 const submitGuessBtn = document.getElementById('submitGuess');
 const feedback = document.getElementById('feedback');
-const historySection = document.getElementById('history');
 const historyList = document.getElementById('historyList');
 const chatBox = document.getElementById('chatBox');
 const messages = document.getElementById('messages');
 const chatInput = document.getElementById('chatInput');
 const abandonBtn = document.getElementById('abandonBtn');
 const returnBtn = document.getElementById('returnBtn');
+
+// Variables pour la saisie du code
+let currentGuess = [];
 
 // Récupération du nom d'utilisateur depuis le serveur
 fetch('/getUserInfo')
@@ -50,21 +52,33 @@ if (soloModeBtn && duelModeBtn) {
 
 // Fonction pour démarrer le jeu
 function startGame() {
-   console.log('fonction startGame() appeler en mode : ',gameMode);
   gameModeSelection.style.display = 'none';
   gameArea.style.display = 'block';
   feedback.innerHTML = '';
-  guessInput.value = '';
+  resetGuess();
   if (gameMode === 'solo') {
-        console.log('emission de l\'evenement "startsologame" au serveur');
     socket.emit('startSoloGame');
     chatBox.style.display = 'none';
-    historySection.style.display = 'block';
     historyList.innerHTML = '';
   } else if (gameMode === 'duel') {
     chatBox.style.display = 'none'; // Le chat sera activé lorsque le duel commencera
-    historySection.style.display = 'none'; // Pas d'historique en mode duel
+    historyList.innerHTML = ''; // Pas d'historique en mode duel
   }
+}
+
+// Gestion de l'interaction avec la roue
+if (gameWheel) {
+  gameWheel.addEventListener('click', (e) => {
+    if (e.target.classList.contains('wheel-segment')) {
+      const value = e.target.getAttribute('data-value');
+      currentGuess.push(value);
+      if (currentGuess.length === 4) {
+        submitGuessBtn.disabled = false;
+      } else {
+        submitGuessBtn.disabled = true;
+      }
+    }
+  });
 }
 
 // Gestion de l'événement du bouton "Valider"
@@ -72,19 +86,18 @@ if (submitGuessBtn) {
   submitGuessBtn.addEventListener('click', submitGuess);
 }
 
-// Permettre la soumission avec la touche Entrée
-guessInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
-    submitGuess();
-  }
-});
+// Fonction pour réinitialiser la saisie du code
+function resetGuess() {
+  currentGuess = [];
+  submitGuessBtn.disabled = true;
+}
 
 // Fonction pour soumettre une proposition
 function submitGuess() {
-  const guess = guessInput.value.trim();
+  const guess = currentGuess.join('');
   if (guess.length === 4 && /^\d{4}$/.test(guess)) {
     socket.emit('guess', guess);
-    guessInput.value = '';
+    resetGuess();
   } else {
     alert('Veuillez entrer un code à 4 chiffres');
   }
@@ -92,7 +105,6 @@ function submitGuess() {
 
 // Réception des feedbacks du serveur
 socket.on('feedback', (data) => {
-          console.log('feedback reç du server:',data);
   feedback.innerHTML += `<p>${data}</p>`;
   feedback.scrollTop = feedback.scrollHeight;
   
@@ -146,7 +158,7 @@ if (returnBtn) {
     socket.emit('leaveGame');
     resetGame();
   });
-};
+}
 
 // Fonction pour réinitialiser le jeu
 function resetGame() {
@@ -155,10 +167,9 @@ function resetGame() {
   feedback.innerHTML = '';
   historyList.innerHTML = '';
   messages.innerHTML = '';
-  guessInput.value = '';
+  resetGuess();
   chatInput.value = '';
   chatBox.style.display = 'none';
-  historySection.style.display = 'none';
   gameMode = '';
 }
 
@@ -188,4 +199,3 @@ socket.on('opponentLeft', (message) => {
   alert(message);
   resetGame();
 });
-
