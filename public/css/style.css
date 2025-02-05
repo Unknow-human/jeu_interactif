@@ -178,6 +178,31 @@ input[type="password"]::placeholder {
   margin-top: 10px;
 }
 
+/* Styles pour le tableau de classement */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #333;
+  color: #fff;
+  text-align: left;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+  padding: 15px;
+  border: 1px solid #444;
+}
+
+.leaderboard-table th {
+  background-color: #444;
+  color: #fff;
+}
+
+.leaderboard-table tr:nth-child(even) {
+  background-color: #383838;
+}
+
+
 /* Animations de fond */
 @keyframes bgAnimation {
   0% { background-position: 0 0; }
