@@ -4,19 +4,19 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #121212;
+  background-color: #282c34;
   color: #ffffff;
 }
 
 /* Thème sombre */
 body {
-  background: #121212;
+  background: #282c34;
   color: #ffffff;
 }
 
 /* Thème clair */
 body.light-theme {
-  background: #ffffff;
+  background: #f0f0f0;
   color: #000000;
 }
 
@@ -29,7 +29,7 @@ body.light-theme {
 
 /* En-tête */
 .app-header {
-  background-color: #1f1f1f;
+  background-color: #ff6b6b;
   color: #ffffff;
   text-align: center;
   padding: 20px 0;
@@ -48,7 +48,7 @@ body.light-theme {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #1f1f1f;
+  background-color: #ff6b6b;
   padding: 10px 0;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 }
@@ -71,7 +71,7 @@ body.light-theme {
   display: inline-block;
   padding: 12px 25px;
   margin: 10px 5px;
-  background-color: #ff6b6b;
+  background-color: #4caf50;
   border: none;
   border-radius: 30px;
   color: #ffffff;
@@ -82,16 +82,16 @@ body.light-theme {
 }
 
 .btn:hover {
-  background-color: #ff5252;
+  background-color: #45a049;
   transform: translateY(-3px);
 }
 
 .btn-secondary {
-  background-color: #4caf50;
+  background-color: #ff6b6b;
 }
 
 .btn-secondary:hover {
-  background-color: #43a047;
+  background-color: #e64545;
 }
 
 .btn-return {
@@ -106,20 +106,20 @@ body.light-theme {
 .theme-btn {
   margin-top: 20px;
   background-color: transparent;
-  border: 2px solid #ff6b6b;
+  border: 2px solid #4caf50;
   border-radius: 30px;
   padding: 10px 20px;
-  color: #ff6b6b;
+  color: #4caf50;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .theme-btn:hover {
-  background-color: #ff6b6b;
+  background-color: #4caf50;
   color: #ffffff;
 }
 
-/* Inputs (suite) */
+/* Inputs */
 input[type="text"],
 input[type="password"] {
   padding: 15px;
@@ -127,7 +127,7 @@ input[type="password"] {
   width: 80%;
   max-width: 400px;
   font-size: 16px;
-  border: 2px solid #ff6b6b;
+  border: 2px solid #4caf50;
   border-radius: 30px;
   background-color: transparent;
   color: inherit;
@@ -143,7 +143,7 @@ input[type="password"]::placeholder {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #ff6b6b;
+  background-color: #4caf50;
   color: #ffffff;
   padding: 15px;
   border-radius: 5px;
@@ -152,7 +152,7 @@ input[type="password"]::placeholder {
 
 /* Notification de code trouvé */
 .notification-code {
-  background-color: #ff6b6b;
+  background-color: #4caf50;
   color: white;
   padding: 10px;
   border-radius: 5px;
@@ -170,36 +170,60 @@ input[type="password"]::placeholder {
   animation: slideIn 0.5s ease;
 }
 
-/* Styles pour les boutons */
-.game-buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+/* Chat */
+#chatBox {
+  background-color: #333;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 100%;
 }
 
-#soloMode, #duelMode {
-  margin: 5px;
+#messages {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
 }
 
-/* Tableaux Améliorés */
-table {
+#chatInput {
   width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
-}
-
-table th, table td {
   padding: 10px;
-  text-align: center;
+  border-radius: 20px;
+  border: 1px solid #4caf50;
+  background-color: #444;
+  color: #fff;
 }
 
-table th {
-  background-color: #ff6b6b;
-  color: #ffffff;
+/* Animations de fond */
+@keyframes bgAnimation {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
 }
 
-table tr:nth-child(even) {
-  background-color: #333333;
+body {
+  background: linear-gradient(135deg, #ff6b6b, #4caf50);
+  background-size: 200% 200%;
+  animation: bgAnimation 15s ease infinite;
+}
+
+/* Transition des éléments */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1.5s forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Historique */
+.game-history {
+  background-color: #444;
+  padding: 15px;
+  border-radius: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
 }
 
 /* Responsive Design (Suite) */
@@ -258,27 +282,4 @@ table tr:nth-child(even) {
   .nav-link span {
     font-size: 8px;
   }
-}
-
-/* Animations de fond */
-@keyframes bgAnimation {
-  0% { background-position: 0 0; }
-  100% { background-position: 100% 100%; }
-}
-
-body {
-  background: linear-gradient(135deg, #1f1f1f, #121212);
-  background-size: 200% 200%;
-  animation: bgAnimation 15s ease infinite;
-}
-
-/* Transition des éléments */
-.fade-in {
-  opacity: 0;
-  animation: fadeIn 1.5s forwards;
-}
-
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }
