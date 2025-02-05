@@ -17,16 +17,14 @@
         <button id="soloMode" class="btn">Mode Solo</button>
         <button id="duelMode" class="btn">Mode Duel</button>
       </div>
-      <div id="gameArea" class="game-area" style="display:none;">
+      <div id="gameArea" class="game-area">
         <div class="game-left">
           <p id="instructions">Entrez un code à 4 chiffres :</p>
           <input type="text" id="guessInput" maxlength="4">
           <button id="submitGuess" class="btn">Valider</button>
           <div id="feedback"></div>
-          <!-- Notification de code trouvé -->
-          <div class="notification-code">2 chiffres trouvés, 1 à la bonne place</div>
           <!-- Historique des tentatives -->
-          <div id="history" style="display:none;">
+          <div class="game-history">
             <h3>Historique des tentatives :</h3>
             <ul id="historyList"></ul>
           </div>
@@ -49,7 +47,7 @@
       <a href="game.html" class="nav-link fade-in">Accueil</a>
       <a href="profile.html" class="nav-link fade-in">Profil</a>
       <a href="leaderboard.html" class="nav-link fade-in">Classement</a>
-      <a href="game.html" class="nav-link fade-in">Jeu</a>
+      <a href="help.html" class="nav-link fade-in">Aide</a>
       <a href="/logout" class="nav-link fade-in">Déconnexion</a>
     </nav>
   </div>
