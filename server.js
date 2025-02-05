@@ -10,7 +10,7 @@ const fs = require('fs');
 
 const memorystore = require('memorystore')(session);
 const sessionStore = new memorystore({
-  checkPeriod: 2592000000 
+  checkPeriod: 2147483647 
 });
 
 // Charger le secret depuis les variables d'environnement
