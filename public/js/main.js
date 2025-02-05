@@ -9,9 +9,6 @@ window.addEventListener('load', () => {
 // main.js
 
 
-
-// Appeler la fonction au chargement de la page
-window.addEventListener('DOMContentLoaded', displayMenuIfLoggedIn);
 // public/js/main.js
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -23,4 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// Appeler la fonction au chargement de la page
+window.addEventListener('DOMContentLoaded', displayMenuIfLoggedIn);
+// public/js/main.js
+
+
 
