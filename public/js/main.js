@@ -1,15 +1,4 @@
 // public/js/main.js
-// Charger la préférence de thème
-window.addEventListener('load', () => {
-  const theme = localStorage.getItem('theme');
-  if (theme === 'light') {
-    document.body.classList.add('light-theme');
-  }
-});
-// main.js
-
-
-// public/js/main.js
 
 document.addEventListener("DOMContentLoaded", () => {
   const toggleThemeBtn = document.getElementById('toggleTheme');
@@ -17,13 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (toggleThemeBtn) {
     toggleThemeBtn.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
+      if (document.body.classList.contains('light-theme')) {
+        toggleThemeBtn.innerHTML = "Changer en Thème Sombre";
+      } else {
+        toggleThemeBtn.innerHTML = "Changer en Thème Clair";
+      }
     });
   }
 });
-
-// Appeler la fonction au chargement de la page
-window.addEventListener('DOMContentLoaded', displayMenuIfLoggedIn);
-// public/js/main.js
-
-
-
