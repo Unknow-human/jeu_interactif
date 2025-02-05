@@ -8,4 +8,53 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <div class="
+  <div class="app-wrapper fade-in">
+    <header class="app-header">
+      <h1>Numéno 4</h1>
+    </header>
+    <main class="app-main">
+      <h2>Classement des Joueurs</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Position</th>
+            <th>Nom d'Utilisateur</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardTable">
+          <!-- Les données du classement seront injectées ici -->
+        </tbody>
+      </table>
+      <div class="buttons">
+        <a href="game.html" class="btn btn-return">Retour au jeu</a>
+      </div>
+    </main>
+    <nav class="app-nav">
+      <a href="index.html" class="nav-link fade-in">
+        <img src="../img/home.svg" alt="Accueil">
+        <span>Accueil</span>
+      </a>
+      <a href="profile.html" class="nav-link fade-in">
+        <img src="../img/profile.svg" alt="Profil">
+        <span>Profil</span>
+      </a>
+      <a href="leaderboard.html" class="nav-link fade-in">
+        <img src="../img/leaderboard.svg" alt="Classement">
+        <span>Classement</span>
+      </a>
+      <a href="game.html" class="nav-link fade-in">
+        <img src="../img/game.svg" alt="Jeu">
+        <span>Jeu</span>
+      </a>
+      <a href="/logout" class="nav-link fade-in">
+        <img src="../img/logout.svg" alt="Déconnexion">
+        <span>Déconnexion</span>
+      </a>
+    </nav>
+  </div>
+  <script src="../js/main.js"></script>
+  <script src="../js/leaderboard.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>
