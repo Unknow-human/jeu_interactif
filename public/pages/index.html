@@ -1,9 +1,9 @@
-<!-- public/pages/index.html -->
+<!-- public/pages/game.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Accueil - Numéno 4</title>
+  <title>Jeu - Numéno 4</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -13,14 +13,36 @@
       <h1>Numéno 4</h1>
     </header>
     <main class="app-main">
-      <div class="welcome">
-        <h2>Bienvenue sur Numéno 4</h2>
-        <p>Prêt à deviner le code secret ?</p>
+      <div id="gameModeSelection">
+        <button id="soloMode" class="btn">Mode Solo</button>
+        <button id="duelMode" class="btn">Mode Duel</button>
       </div>
-      <div class="buttons">
-        <a href="login.html" class="btn">Connexion</a>
-        <a href="register.html" class="btn">Inscription</a>
-        <a href="help.html" class="btn btn-return">Aide</a>
+      <div id="gameArea" class="game-area" style="display:none;">
+        <div class="game-left">
+          <p id="instructions">Entrez un code à 4 chiffres :</p>
+          <input type="text" id="guessInput" maxlength="4">
+          <button id="submitGuess" class="btn">Valider</button>
+          <div id="feedback"></div>
+          <!-- Notification de code trouvé -->
+          <div class="notification-code">2 chiffres trouvés, 1 à la bonne place</div>
+          <!-- Historique des tentatives -->
+          <div id="history" style="display:none;">
+            <h3>Historique des tentatives :</h3>
+            <ul id="historyList"></ul>
+          </div>
+        </div>
+        <!-- Chat à Droite -->
+        <div class="game-right">
+          <div id="chatBox">
+            <h3>Chat</h3>
+            <div id="messages"></div>
+            <input type="text" id="chatInput" placeholder="Envoyer un message...">
+          </div>
+        </div>
+      </div>
+      <div class="game-buttons">
+        <button id="abandonBtn" class="btn btn-secondary">Abandonner</button>
+        <button id="returnBtn" class="btn btn-return">Retour</button>
       </div>
     </main>
     <nav class="app-nav">
@@ -31,7 +53,9 @@
       <a href="/logout" class="nav-link fade-in">Déconnexion</a>
     </nav>
   </div>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="../js/main.js"></script>
+  <script src="../js/game.js"></script>
   <script src="../js/animations.js"></script>
 </body>
 </html>
