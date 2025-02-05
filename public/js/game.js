@@ -15,6 +15,8 @@ const soloGameArea = document.getElementById('soloGameArea');
 const duelGameArea = document.getElementById('duelGameArea');
 const submitGuessSolo = document.getElementById('submitGuessSolo');
 const submitGuessDuel = document.getElementById('submitGuessDuel');
+const guessInputSolo = document.getElementById('guessInputSolo');
+const guessInputDuel = document.getElementById('guessInputDuel');
 const feedbackSolo = document.getElementById('historyListSolo');
 const feedbackDuel = document.getElementById('historyListDuel');
 const chatBox = document.getElementById('chatBox');
@@ -24,7 +26,7 @@ const abandonBtn = document.getElementById('abandonBtn');
 const returnBtn = document.getElementById('returnBtn');
 
 // Variables pour la saisie du code
-let currentGuess = [];
+let currentGuess = '';
 
 // Récupération du nom d'utilisateur depuis le serveur
 fetch('/getUserInfo')
@@ -69,19 +71,18 @@ function startGame() {
 
 // Gestion de l'événement du bouton "Valider"
 if (submitGuessSolo) {
-  submitGuessSolo.addEventListener('click', submitGuess);
+  submitGuessSolo.addEventListener('click', () => submitGuess(guessInputSolo));
 }
-
 if (submitGuessDuel) {
-  submitGuessDuel.addEventListener('click', submitGuess);
+  submitGuessDuel.addEventListener('click', () => submitGuess(guessInputDuel));
 }
 
 // Fonction pour soumettre une proposition
-function submitGuess() {
-  const guess = currentGuess.join('');
+function submitGuess(inputElement) {
+  const guess = inputElement.value.trim();
   if (guess.length === 4 && /^\d{4}$/.test(guess)) {
     socket.emit('guess', guess);
-    resetGuess();
+    inputElement.value = '';
   } else {
     alert('Veuillez entrer un code à 4 chiffres');
   }
@@ -126,6 +127,7 @@ if (abandonBtn) {
     if (confirm('Voulez-vous vraiment abandonner la partie ?')) {
       socket.emit('abandon');
       resetGame();
+      window.location.href = 'index.html'; // Renvoyer à l'accueil
     }
   });
 }
@@ -135,17 +137,19 @@ if (returnBtn) {
   returnBtn.addEventListener('click', () => {
     socket.emit('leaveGame');
     resetGame();
+    window.location.href = 'index.html'; // Renvoyer à l'accueil
   });
 }
 
 // Fonction pour réinitialiser le jeu
 function resetGame() {
-  gameArea.style.display = 'none';
+  soloGameArea.style.display = 'none';
+  duelGameArea.style.display = 'none';
   gameModeSelection.style.display = 'block';
   feedbackSolo.innerHTML = '';
   feedbackDuel.innerHTML = '';
   messages.innerHTML = '';
-  currentGuess = [];
+  currentGuess = '';
   chatInput.value = '';
   chatBox.style.display = 'none';
   gameMode = '';
@@ -176,4 +180,5 @@ socket.on('welcome', (message) => {
 socket.on('opponentLeft', (message) => {
   alert(message);
   resetGame();
+  window.location.href = 'index.html'; // Renvoyer à l'accueil
 });
