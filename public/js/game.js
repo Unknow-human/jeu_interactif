@@ -60,11 +60,15 @@ function startGame() {
     soloGameArea.style.display = 'block';
     duelGameArea.style.display = 'none';
     chatBox.style.display = 'none';
+    abandonBtn.style.display = 'block';
+    returnBtn.style.display = 'block';
     socket.emit('startSoloGame');
   } else if (gameMode === 'duel') {
     soloGameArea.style.display = 'none';
     duelGameArea.style.display = 'block';
     chatBox.style.display = 'none'; // Le chat sera activé lorsque le duel commencera
+    abandonBtn.style.display = 'block';
+    returnBtn.style.display = 'block';
     socket.emit('findMatch');
   }
 }
@@ -152,6 +156,8 @@ function resetGame() {
   currentGuess = '';
   chatInput.value = '';
   chatBox.style.display = 'none';
+  abandonBtn.style.display = 'none';
+  returnBtn.style.display = 'none';
   gameMode = '';
 }
 
