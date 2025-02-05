@@ -1,3 +1,4 @@
+<!-- public/pages/game.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -17,35 +18,33 @@
         <button id="soloMode" class="btn">Mode Solo</button>
         <button id="duelMode" class="btn">Mode Duel</button>
       </div>
-      
-      <!-- Zone de jeu avec roue de chiffres -->
-      <div id="gameArea" class="game-area" style="display:none;">
-        <div class="game-wheel-container">
-          <div id="gameWheel" class="game-wheel">
-            <!-- Chiffres de 0 à 9 -->
-            <div class="wheel-segment" data-value="0">0</div>
-            <div class="wheel-segment" data-value="1">1</div>
-            <div class="wheel-segment" data-value="2">2</div>
-            <div class="wheel-segment" data-value="3">3</div>
-            <div class="wheel-segment" data-value="4">4</div>
-            <div class="wheel-segment" data-value="5">5</div>
-            <div class="wheel-segment" data-value="6">6</div>
-            <div class="wheel-segment" data-value="7">7</div>
-            <div class="wheel-segment" data-value="8">8</div>
-            <div class="wheel-segment" data-value="9">9</div>
-          </div>
-          <button id="submitGuess" class="btn">Valider</button>
-        </div>
 
-        <!-- Section historique des tentatives -->
-        <div class="game-history">
+      <!-- Zone de jeu pour le mode solo -->
+      <div id="soloGameArea" class="game-area" style="display:none;">
+        <!-- Historique des tentatives -->
+        <div class="game-history" id="historyListSolo">
           <h3>Historique des Tentatives :</h3>
-          <ul id="historyList"></ul>
+          <ul id="historyListSolo"></ul>
         </div>
+        <!-- Zone de saisie -->
+        <div class="input-container">
+          <input type="text" id="guessInputSolo" placeholder="Entrez un code à 4 chiffres">
+          <button id="submitGuessSolo" class="btn">Valider</button>
+        </div>
+      </div>
 
-        <!-- Zone de chat -->
-        <div class="game-chat">
-          <div id="chatBox">
+      <!-- Zone de jeu pour le mode duel -->
+      <div id="duelGameArea" class="game-area" style="display:none;">
+        <!-- Historique des tentatives -->
+        <div class="game-history" id="historyListDuel">
+          <h3>Historique des Tentatives :</h3>
+          <ul id="historyListDuel"></ul>
+        </div>
+        <!-- Zone de saisie et chat -->
+        <div class="input-container">
+          <input type="text" id="guessInputDuel" placeholder="Entrez un code à 4 chiffres">
+          <button id="submitGuessDuel" class="btn">Valider</button>
+          <div id="chatBox" class="game-chat">
             <h3>Chat</h3>
             <div id="messages"></div>
             <input type="text" id="chatInput" placeholder="Envoyer un message...">
@@ -60,11 +59,21 @@
       </div>
     </main>
     <nav class="app-nav">
-      <a href="game.html" class="nav-link fade-in">Accueil</a>
-      <a href="profile.html" class="nav-link fade-in">Profil</a>
-      <a href="leaderboard.html" class="nav-link fade-in">Classement</a>
-      <a href="help.html" class="nav-link fade-in">Aide</a>
-      <a href="/logout" class="nav-link fade-in">Déconnexion</a>
+      <a href="game.html" class="nav-link fade-in">
+        <span>Accueil</span>
+      </a>
+      <a href="profile.html" class="nav-link fade-in">
+        <span>Profil</span>
+      </a>
+      <a href="leaderboard.html" class="nav-link fade-in">
+        <span>Classement</span>
+      </a>
+      <a href="help.html" class="nav-link fade-in">
+        <span>Aide</span>
+      </a>
+      <a href="/logout" class="nav-link fade-in">
+        <span>Déconnexion</span>
+      </a>
     </nav>
   </div>
   <script src="/socket.io/socket.io.js"></script>
