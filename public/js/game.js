@@ -11,11 +11,12 @@ let gameMode = ''; // 'solo' ou 'duel'
 const soloModeBtn = document.getElementById('soloMode');
 const duelModeBtn = document.getElementById('duelMode');
 const gameModeSelection = document.getElementById('gameModeSelection');
-const gameArea = document.getElementById('gameArea');
-const gameWheel = document.getElementById('gameWheel');
-const submitGuessBtn = document.getElementById('submitGuess');
-const feedback = document.getElementById('feedback');
-const historyList = document.getElementById('historyList');
+const soloGameArea = document.getElementById('soloGameArea');
+const duelGameArea = document.getElementById('duelGameArea');
+const submitGuessSolo = document.getElementById('submitGuessSolo');
+const submitGuessDuel = document.getElementById('submitGuessDuel');
+const feedbackSolo = document.getElementById('historyListSolo');
+const feedbackDuel = document.getElementById('historyListDuel');
 const chatBox = document.getElementById('chatBox');
 const messages = document.getElementById('messages');
 const chatInput = document.getElementById('chatInput');
@@ -53,43 +54,26 @@ if (soloModeBtn && duelModeBtn) {
 // Fonction pour démarrer le jeu
 function startGame() {
   gameModeSelection.style.display = 'none';
-  gameArea.style.display = 'block';
-  feedback.innerHTML = '';
-  resetGuess();
   if (gameMode === 'solo') {
-    socket.emit('startSoloGame');
+    soloGameArea.style.display = 'block';
+    duelGameArea.style.display = 'none';
     chatBox.style.display = 'none';
-    historyList.innerHTML = '';
+    socket.emit('startSoloGame');
   } else if (gameMode === 'duel') {
+    soloGameArea.style.display = 'none';
+    duelGameArea.style.display = 'block';
     chatBox.style.display = 'none'; // Le chat sera activé lorsque le duel commencera
-    historyList.innerHTML = ''; // Pas d'historique en mode duel
+    socket.emit('findMatch');
   }
 }
 
-// Gestion de l'interaction avec la roue
-if (gameWheel) {
-  gameWheel.addEventListener('click', (e) => {
-    if (e.target.classList.contains('wheel-segment')) {
-      const value = e.target.getAttribute('data-value');
-      currentGuess.push(value);
-      if (currentGuess.length === 4) {
-        submitGuessBtn.disabled = false;
-      } else {
-        submitGuessBtn.disabled = true;
-      }
-    }
-  });
-}
-
 // Gestion de l'événement du bouton "Valider"
-if (submitGuessBtn) {
-  submitGuessBtn.addEventListener('click', submitGuess);
+if (submitGuessSolo) {
+  submitGuessSolo.addEventListener('click', submitGuess);
 }
 
-// Fonction pour réinitialiser la saisie du code
-function resetGuess() {
-  currentGuess = [];
-  submitGuessBtn.disabled = true;
+if (submitGuessDuel) {
+  submitGuessDuel.addEventListener('click', submitGuess);
 }
 
 // Fonction pour soumettre une proposition
@@ -105,15 +89,9 @@ function submitGuess() {
 
 // Réception des feedbacks du serveur
 socket.on('feedback', (data) => {
-  feedback.innerHTML += `<p>${data}</p>`;
-  feedback.scrollTop = feedback.scrollHeight;
-  
-  if (gameMode === 'solo') {
-    // Ajouter à l'historique en mode solo
-    const listItem = document.createElement('li');
-    listItem.textContent = data;
-    historyList.appendChild(listItem);
-  }
+  const feedbackElement = (gameMode === 'solo') ? feedbackSolo : feedbackDuel;
+  feedbackElement.innerHTML += `<li>${data}</li>`;
+  feedbackElement.scrollTop = feedbackElement.scrollHeight;
 });
 
 // Activation du chat en mode duel
@@ -164,10 +142,10 @@ if (returnBtn) {
 function resetGame() {
   gameArea.style.display = 'none';
   gameModeSelection.style.display = 'block';
-  feedback.innerHTML = '';
-  historyList.innerHTML = '';
+  feedbackSolo.innerHTML = '';
+  feedbackDuel.innerHTML = '';
   messages.innerHTML = '';
-  resetGuess();
+  currentGuess = [];
   chatInput.value = '';
   chatBox.style.display = 'none';
   gameMode = '';
