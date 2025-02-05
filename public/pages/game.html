@@ -21,9 +21,9 @@
       <!-- Zone de jeu pour le mode solo -->
       <div id="soloGameArea" class="game-area" style="display:none;">
         <!-- Historique des tentatives -->
-        <div class="game-history" id="historyListSolo">
+        <div class="game-history" id="historyListSoloContainer" style="max-height: 200px; overflow-y: auto;">
           <h3>Historique des Tentatives :</h3>
-          <ul id="historyListSolo" style="max-height: 200px; overflow-y: auto;"></ul>
+          <ul id="historyListSolo"></ul>
         </div>
         <!-- Zone de saisie -->
         <div class="input-container">
@@ -35,17 +35,17 @@
       <!-- Zone de jeu pour le mode duel -->
       <div id="duelGameArea" class="game-area" style="display:none;">
         <!-- Historique des tentatives -->
-        <div class="game-history" id="historyListDuel">
+        <div class="game-history" id="historyListDuelContainer" style="max-height: 200px; overflow-y: auto;">
           <h3>Historique des Tentatives :</h3>
-          <ul id="historyListDuel" style="max-height: 200px; overflow-y: auto;"></ul>
+          <ul id="historyListDuel"></ul>
         </div>
         <!-- Zone de saisie et chat -->
         <div class="input-container">
           <input type="text" id="guessInputDuel" placeholder="Entrez un code à 4 chiffres">
           <button id="submitGuessDuel" class="btn">Valider</button>
-          <div id="chatBox" class="game-chat">
+          <div id="chatBox" class="game-chat" style="max-height: 150px; overflow-y: auto;">
             <h3>Chat</h3>
-            <div id="messages" style="max-height: 150px; overflow-y: auto;"></div>
+            <div id="messages"></div>
             <input type="text" id="chatInput" placeholder="Envoyer un message...">
           </div>
         </div>
