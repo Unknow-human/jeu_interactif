@@ -1,4 +1,3 @@
-<!-- public/pages/game.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,24 +12,39 @@
       <h1>Numéno 4</h1>
     </header>
     <main class="app-main">
-      <div id="gameModeSelection">
+      <!-- Sélection du mode de jeu -->
+      <div id="gameModeSelection" class="game-mode-selection">
         <button id="soloMode" class="btn">Mode Solo</button>
         <button id="duelMode" class="btn">Mode Duel</button>
       </div>
-      <div id="gameArea" class="game-area">
-        <div class="game-left">
-          <p id="instructions">Entrez un code à 4 chiffres :</p>
-          <input type="text" id="guessInput" maxlength="4">
-          <button id="submitGuess" class="btn">Valider</button>
-          <div id="feedback"></div>
-          <!-- Historique des tentatives -->
-          <div class="game-history">
-            <h3>Historique des tentatives :</h3>
-            <ul id="historyList"></ul>
+      
+      <!-- Zone de jeu avec roue de chiffres -->
+      <div id="gameArea" class="game-area" style="display:none;">
+        <div class="game-wheel-container">
+          <div id="gameWheel" class="game-wheel">
+            <!-- Chiffres de 0 à 9 -->
+            <div class="wheel-segment" data-value="0">0</div>
+            <div class="wheel-segment" data-value="1">1</div>
+            <div class="wheel-segment" data-value="2">2</div>
+            <div class="wheel-segment" data-value="3">3</div>
+            <div class="wheel-segment" data-value="4">4</div>
+            <div class="wheel-segment" data-value="5">5</div>
+            <div class="wheel-segment" data-value="6">6</div>
+            <div class="wheel-segment" data-value="7">7</div>
+            <div class="wheel-segment" data-value="8">8</div>
+            <div class="wheel-segment" data-value="9">9</div>
           </div>
+          <button id="submitGuess" class="btn">Valider</button>
         </div>
-        <!-- Chat à Droite -->
-        <div class="game-right">
+
+        <!-- Section historique des tentatives -->
+        <div class="game-history">
+          <h3>Historique des Tentatives :</h3>
+          <ul id="historyList"></ul>
+        </div>
+
+        <!-- Zone de chat -->
+        <div class="game-chat">
           <div id="chatBox">
             <h3>Chat</h3>
             <div id="messages"></div>
@@ -38,16 +52,18 @@
           </div>
         </div>
       </div>
+
+      <!-- Boutons d'action -->
       <div class="game-buttons">
         <button id="abandonBtn" class="btn btn-secondary">Abandonner</button>
         <button id="returnBtn" class="btn btn-return">Retour</button>
       </div>
     </main>
     <nav class="app-nav">
-      <a href="game.html" class="nav-link fade-in">Accueil</a>
+      <a href="index.html" class="nav-link fade-in">Accueil</a>
       <a href="profile.html" class="nav-link fade-in">Profil</a>
       <a href="leaderboard.html" class="nav-link fade-in">Classement</a>
-      <a href="help.html" class="nav-link fade-in">Aide</a>
+      <a href="game.html" class="nav-link fade-in">Jeu</a>
       <a href="/logout" class="nav-link fade-in">Déconnexion</a>
     </nav>
   </div>
