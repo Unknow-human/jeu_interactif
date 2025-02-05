@@ -261,3 +261,29 @@ body {
   border-radius: 10px;
   margin-bottom: 20px;
 }
+
+/* Thèmes additionnels */
+body.intergalactic-theme {
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #ffffff;
+}
+
+body.sea-star-theme {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: #ffffff;
+}
+
+body.moonlight-theme {
+  background: linear-gradient(135deg, #c33764, #1d2671);
+  color: #ffffff;
+}
+
+body.cloudy-sky-theme {
+  background: linear-gradient(135deg, #bdc3c7, #2c3e50);
+  color: #ffffff;
+}
+
+body.stormy-sky-theme {
+  background: linear-gradient(135deg, #434343, #000000);
+  color: #ffffff;
+}
