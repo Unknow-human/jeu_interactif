@@ -20,35 +20,56 @@ body.light-theme {
   color: #000000;
 }
 
-/* Styles communs */
-.container {
+/* Conteneur principal */
+.app-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  height: 100vh;
+}
+
+/* En-tête */
+.app-header {
+  background-color: #1f1f1f;
+  color: #ffffff;
   text-align: center;
+  padding: 20px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenu principal */
+.app-main {
+  flex: 1;
+  overflow-y: auto;
   padding: 20px;
 }
 
-h1 {
-  font-size: 48px;
-  margin-bottom: 30px;
-  color: #ff6b6b;
+/* Navigation en bas */
+.app-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #1f1f1f;
+  padding: 10px 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 }
 
-p {
-  font-size: 18px;
-  line-height: 1.6;
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.nav-link img {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 5px;
 }
 
-li {
-  margin-bottom: 10px;
+.nav-link span {
+  font-size: 12px;
 }
 
 /* Styles pour les boutons */
@@ -135,74 +156,6 @@ input[type="password"]::placeholder {
   z-index: 1000;
 }
 
-/* Styles pour le jeu */
-.game-container {
-  text-align: center;
-  padding: 20px;
-}
-
-#gameModeSelection {
-  margin-top: 30px;
-}
-
-#gameArea {
-  margin-top: 30px;
-}
-
-#guessInput {
-  font-size: 24px;
-  padding: 10px;
-  width: 200px;
-  text-align: center;
-  margin-bottom: 20px;
-  border: 2px solid #ff6b6b;
-  border-radius: 30px;
-  background-color: transparent;
-  color: inherit;
-}
-
-#submitGuess {
-  padding: 12px 25px;
-}
-
-#feedback, #historyList {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  border-radius: 5px;
-  max-height: 200px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-}
-
-#feedback p, #historyList li {
-  margin: 5px 0;
-}
-
-/* Chat */
-#chatBox {
-  display: none;
-  margin-top: 20px;
-}
-
-#messages {
-  height: 400px; /* Ajuster la hauteur pour voir plus de messages */
-  overflow-y: scroll;
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-#chatInput {
-  width: 90%;
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #ff6b6b;
-  border-radius: 30px;
-  background-color: transparent;
-  color: inherit;
-}
-
 /* Animations */
 .fade-in {
   opacity: 0;
@@ -216,133 +169,10 @@ input[type="password"]::placeholder {
   100% { opacity: 1; }
 }
 
-/* Tableaux */
-table {
-  width: 90%;
-  max-width: 800px;
-  margin: 20px auto;
-  border-collapse: collapse;
-}
-
-table th, table td {
-  border: 1px solid #ffffff;
-  padding: 10px;
-  text-align: center;
-}
-
-table th {
-  background-color: #ff6b6b;
-}
-
-table tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Récompenses */
-.reward {
-  display: inline-block;
-  background-color: #ff6b6b;
-  padding: 10px 20px;
-  margin: 10px;
-  border-radius: 20px;
-  font-size: 16px;
-  color: #ffffff;
-}
-
-/* Styles pour le menu en haut */
-.top-menu {
-  display: flex;
-  justify-content: flex-end;
-  background-color: #333;
-  padding: 10px;
-}
-
-.top-menu .btn {
-  color: white;
-  text-decoration: none;
-  margin: 0 10px;
-}
-
-.top-menu .btn:hover {
-  text-decoration: underline;
-}
-
-/* Styles pour les boutons dans le jeu */
-.game-buttons {
-  margin-top: 20px;
-}
-
-.game-buttons .btn {
-  margin: 5px;
-}
-
-/* Styles pour le chat */
-#chatBox h3 {
-  margin-bottom: 10px;
-}
-
-#chatBox {
-  margin-top: 20px;
-}
-
-/* Styles pour l'historique */
-#history {
-  margin-top: 20px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .top-menu {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .top-menu .btn {
-    margin: 5px 0;
-  }
-
-  .container {
-    padding: 10px;
-  }
-
-  h1 {
-    font-size: 36px;
-  }
-
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-  }
-
-  #chatBox,
-  #messages,
-  #feedback {
-    width: 100%;
-    max-width: none;
-  }
-
-  .game-area {
-    flex-direction: column;
-  }
-
-  .game-left,
-  .game-right {
-    width: 100%;
-  }
-}
 /* Responsive Design (Suite) */
 @media (max-width: 768px) {
-  .game-area {
-    flex-direction: column;
-  }
-
-  .game-left, .game-right {
-    width: 100%;
-  }
-
-  #chatBox, #messages, #feedback {
-    width: 100%;
-    max-width: none;
+  .app-main {
+    padding: 10px;
   }
 
   .btn {
@@ -350,12 +180,25 @@ table tr:nth-child(even) {
     padding: 10px 20px;
   }
 
-  h1 {
-    font-size: 28px;
+  .nav-link span {
+    font-size: 10px;
   }
 
-  .container {
-    padding: 10px;
+  h1, h2, h3 {
+    font-size: 24px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+  }
+
+  .game-area {
+    flex-direction: column;
+  }
+
+  .game-left, .game-right {
+    width: 100%;
   }
 }
 
@@ -366,58 +209,53 @@ table tr:nth-child(even) {
     padding: 8px 16px;
   }
 
-  h1 {
-    font-size: 24px;
+  h1, h2, h3 {
+    font-size: 20px;
   }
 
-  .top-menu {
-    padding: 5px;
+  .nav-link {
+    flex-direction: column;
   }
 
-  .top-menu .btn {
-    margin: 3px 0;
+  .nav-link img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav-link span {
+    font-size: 8px;
   }
 }
 
-/* Styles Spécifiques pour les Pages */
-.page-login, .page-register, .page-profile, .page-help, .page-leaderboard, .page-game {
-  background-color: #2c2c2c;
-  color: #ffffff;
+/* Formulaires de connexion et d'inscription */
+.login-form, .register-form {
+  background-color: #1f1f1f;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  margin: auto;
 }
 
-.page-login h1, .page-register h1, .page-profile h1, .page-help h1, .page-leaderboard h1, .page-game h1 {
-  font-size: 36px;
+.login-form h2, .register-form h2 {
+  font-size: 28px;
   margin-bottom: 20px;
 }
 
-.page-login p, .page-register p, .page-profile p, .page-help p, .page-leaderboard p, .page-game p {
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-/* Animation de Chargement */
-@keyframes loadingAnimation {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loading-spinner {
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top: 4px solid #fff;
-  width: 40px;
-  height: 40px;
-  animation: loadingAnimation 2s linear infinite;
-  margin: 20px auto;
+.login-form p, .register-form p {
+  font-size: 16px;
 }
 
 /* Tableaux Améliorés */
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
 table th, table td {
-  border: 1px solid #dddddd;
   padding: 10px;
+  text-align: center;
 }
 
 table th {
@@ -429,3 +267,25 @@ table tr:nth-child(even) {
   background-color: #333333;
 }
 
+/* Animations de fond */
+@keyframes bgAnimation {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
+}
+
+body {
+  background: linear-gradient(135deg, #1f1f1f, #121212);
+  background-size: 200% 200%;
+  animation: bgAnimation 15s ease infinite;
+}
+
+/* Transition des éléments */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1.5s forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
