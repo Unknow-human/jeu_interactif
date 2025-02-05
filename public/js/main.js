@@ -1,14 +1,5 @@
 // public/js/main.js
 
-
-  // Appliquer le thème stocké dans localStorage
-  const storedThemeIndex = localStorage.getItem('themeIndex');
-  if (storedThemeIndex) {
-    currentThemeIndex = parseInt(storedThemeIndex, 10);
-    document.body.classList.add(themes[currentThemeIndex]);
-  }
-// public/js/main.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const toggleThemeBtn = document.getElementById('toggleTheme');
   const themes = ['intergalactic-theme', 'sea-star-theme', 'moonlight-theme', 'cloudy-sky-theme', 'stormy-sky-theme'];
@@ -21,8 +12,5 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.add(themes[currentThemeIndex]);
       toggleThemeBtn.innerHTML = `Changer en ${themes[(currentThemeIndex + 1) % themes.length].replace(/-/g, ' ').replace('theme', 'thème')}`;
     });
-  }
-});
-
   }
 });
