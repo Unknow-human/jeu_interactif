@@ -12,7 +12,7 @@ body {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 100vh;
 }
 
 /* En-tête */
@@ -21,7 +21,7 @@ body {
   color: #ffffff;
   text-align: center;
   padding: 5px;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: bold;
 }
 
