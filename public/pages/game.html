@@ -30,8 +30,8 @@
           <input type="text" id="guessInputSolo" placeholder="Entrez un code à 4 chiffres">
           <button id="submitGuessSolo" class="btn">Valider</button>
         </div>
-        <!-- Bouton d'action -->
-        <div class="game-buttons" style="margin-top: 20px;">
+        <!-- Bouton Abandonner -->
+        <div class="game-buttons">
           <button id="abandonBtnSolo" class="btn btn-secondary">Abandonner</button>
         </div>
       </div>
@@ -49,16 +49,21 @@
             <input type="text" id="guessInputDuel" placeholder="Entrez un code à 4 chiffres">
             <button id="submitGuessDuel" class="btn">Valider</button>
           </div>
+          <!-- Bouton Abandonner -->
+          <div class="game-buttons">
+            <button id="abandonBtnDuel" class="btn btn-secondary">Abandonner</button>
+          </div>
         </div>
         <div class="game-chat">
           <h3>Chat</h3>
-          <div id="messages" style="max-height: 200px; overflow-y: auto;"></div>
+          <div id="messages" style="max-height: 100px; overflow-y: auto;"></div>
           <input type="text" id="chatInput" placeholder="Envoyer un message...">
         </div>
-        <!-- Bouton d'action -->
-        <div class="game-buttons" style="margin-top: 20px;">
-          <button id="abandonBtnDuel" class="btn btn-secondary">Abandonner</button>
-        </div>
+      </div>
+
+      <!-- Bouton Retour -->
+      <div class="game-buttons" style="margin-top: 20px;">
+        <button id="returnBtn" class="btn btn-return">Retour</button>
       </div>
     </main>
     <nav class="app-nav">
